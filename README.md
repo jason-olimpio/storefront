@@ -37,8 +37,8 @@ Modern, full-featured e-commerce web application built with Next.js, offering au
 ### Clone the repository
 
 ```bash
-git clone https://github.com/username/StoreHub.git
-cd StoreHub
+git clone https://github.com/username/Storefront.git
+cd Storefront
 ```
 
 ### Install Dependencies

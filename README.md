@@ -1,129 +1,72 @@
 # Storefront
 
-Modern, full-featured e-commerce web application built with Next.js, offering authentication, notifications, localization, and comprehensive order management features.
+A full-featured e-commerce storefront built with Next.js (App Router), featuring authentication, role-based access, real-time notifications, localization, and end-to-end order management.
 
-## 🚀 Features
+**Live:** https://your-live-url-here  
+**Code:** https://github.com/your-username/Storefront
 
-- **Authentication & Authorization**: Secure token-based authentication with role-based access control (Admin/User)
-- **Real-time Notifications**: Notification system for order updates and role changes
-- **Multi-language Support**: Internationalization (i18n) with support for English, Dutch, and Italian
-- **Order Management**: Complete order management system for fitness products
-- **User Management**: Admin dashboard for managing users and their roles
-- **Shopping Cart**: Add items to cart and place orders
-- **Dark Mode**: Theme switching with dark/light mode support
-- **Responsive Design**: Mobile-friendly interface with Tailwind CSS
-- **Type Safety**: Full TypeScript support for type-safe development
+## Key features
 
-## 🛠️ Tech Stack
+- Authentication & authorization with role-based access (Admin/User)
+- Real-time notifications (order updates, role changes)
+- Internationalization (English, Dutch, Italian)
+- Shopping cart and checkout flow
+- Order management (user order history + admin order dashboard)
+- User management (admin role updates)
+- Dark/light theme switching
+- Responsive UI with Tailwind CSS
+- Strong type-safety and validation (TypeScript + Zod)
 
-- **Framework**: Next.js (App Router)
-- **Language**: TypeScript
-- **UI Library**: React
-- **Styling**: Tailwind CSS
-- **State Management**: Redux Toolkit
-- **Data Fetching**: TanStack Query (React Query)
-- **Internationalization**: next-intl
-- **HTTP Client**: Axios
-- **Form Validation**: Zod
-- **Theme**: next-themes
+## Tech stack
 
-## 📋 Prerequisites
+- Next.js (App Router), React
+- TypeScript
+- Tailwind CSS
+- Redux Toolkit
+- TanStack Query (React Query)
+- next-intl
+- Axios
+- Zod
+- next-themes
 
-- **Node.js**: v18.0.0 or higher
-- **npm**: v9.0.0 or higher (or yarn/pnpm)
+## Getting started
 
-## 🚀 Getting Started
+### Prerequisites
+- Node.js 18+
+- npm 9+ (or yarn/pnpm)
 
-### Clone the repository
+### Install & run (development)
 
-```bash
+```
 git clone https://github.com/username/Storefront.git
 cd Storefront
-```
-
-### Install Dependencies
-
-```bash
 npm install
-```
-
-### Running the Application
-
-#### Development Mode
-
-```bash
 npm run dev
 ```
 
-The application will be available at `http://localhost:3000`
+App runs at `http://localhost:3000`.
 
-#### Production Build
+### Production build
 
-```bash
+```
 npm run build
 npm start
 ```
 
-## 📜 Available Scripts
+## Scripts
 
-- `npm run dev` - Start development server with Turbopack
-- `npm run build` - Build the application for production
-- `npm start` - Start the production server
-- `npm run build:gh-pages` - Build for GitHub Pages deployment
-- `npm run deploy` - Deploy to GitHub Pages (builds and deploys)
-- `npm run lint` - Run ESLint to check for code issues
-- `npm run lint:fix` - Automatically fix ESLint issues
-- `npm run lint:next` - Run Next.js ESLint
-- `npm run format` - Format code with Prettier
-- `npm run format:check` - Check code formatting with Prettier
+- `npm run dev` — Start development server (Turbopack)
+- `npm run build` — Create production build
+- `npm start` — Start production server
+- `npm run build:gh-pages` — Build for GitHub Pages
+- `npm run deploy` — Deploy to GitHub Pages
+- `npm run lint` — Run ESLint
+- `npm run lint:fix` — Fix lint issues
+- `npm run lint:next` — Run Next.js ESLint rules
+- `npm run format` — Format with Prettier
+- `npm run format:check` — Check formatting
 
-## 💻 Usage
-
-### Authentication
-
-1. Navigate to the login page (`/`)
-2. Use the default credentials or register a new account
-3. On successful login, you'll be redirected to the home page
-4. JWT tokens are stored in cookies for authentication
-
-### User Management (Admin Only)
-
-1. Log in with an admin account
-2. Navigate to "Users Management" in the navbar
-3. Search and manage users
-4. Update user roles (Admin/User)
-
-### Order Management
-
-#### For Users:
-1. Browse products and add them to cart
-2. View cart and proceed to checkout
-3. Place orders and track order status
-4. View order history in "My Orders"
-
-#### For Admins:
-1. Navigate to "Orders Management" in the navbar
-2. View all orders with filtering options
-3. Update order status (Pending, Processing, Shipping, Delivered)
-4. View order statistics
-
-### Notifications
-
-- Users receive notifications for:
-  - Order status updates
-  - Role changes (admin actions)
-- Notifications are displayed in the notification dropdown
-- Mark notifications as read when viewed
-
-### Localization
-
-- Switch between languages using the language dropdown
-- Supported languages:
-  - English (en)
-  - Dutch (nl)
-  - Italian (it)
-
-## 📁 Project Structure
+## Project structure
 
 ```
 src/
@@ -139,28 +82,9 @@ src/
 │   │   └── users/        # User management components
 │   ├── hooks/            # Custom React hooks
 │   ├── store/            # Redux store and slices
-│   ├── types/            # TypeScript type definitions
-│   └── utils/            # Utility functions
+│   ├── types/            # Shared TypeScript types
+│   └── utils/            # Utilities
 │       └── mock/         # Mock services (localStorage)
-├── messages/             # i18n translation files
-└── public/               # Static assets
+├── messages/              # i18n translation files
+└── public/                # Static assets
 ```
-
-## 🔧 Development
-
-### Code Quality
-
-The project uses ESLint and Prettier for code quality:
-
-```bash
-# Check for linting errors
-npm run lint
-
-# Fix linting errors automatically
-npm run lint:fix
-
-# Format code
-npm run format
-```
-
-Built with ❤️ using Next.js and TypeScript

@@ -1,12 +1,12 @@
 # Storefront
 
-A full-featured e-commerce storefront built with Next.js (App Router), featuring authentication, role-based access, real-time notifications, localization, and end-to-end order management.
+A full-featured e-commerce storefront built with Next.js, featuring authentication, role-based access, real-time notifications, localization, and end-to-end order management.
 
 ## Key features
 
 - Authentication & authorization with role-based access (Admin/User)
 - Real-time notifications (order updates, role changes)
-- Internationalization (English, Dutch, Italian)
+- Internationalization
 - Shopping cart and checkout flow
 - Order management (user order history + admin order dashboard)
 - User management (admin role updates)

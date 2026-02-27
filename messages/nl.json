@@ -35,10 +35,10 @@
     "passwordLength": "Wachtwoord moet minimaal 8 tekens lang zijn.",
     "passwordUppercase": "Wachtwoord moet minimaal één hoofdletter bevatten.",
     "passwordNumber": "Wachtwoord moet minimaal één cijfer bevatten.",
-    "passwordSpecial": "Wachtwoord moet minimaal één speciaal teken bevatten (bijv. !, @, #, enz.).",
+    "passwordSpecial": "Wachtwoord moet minimaal één speciaal teken bevatten (bijv. !, @/, #, enz.).",
     "userAlreadyExists": "Er bestaat al een account met dit e-mailadres. Log in of gebruik een ander e-mailadres.",
     "passwordRequirementsNotMet": "Het wachtwoord voldoet niet aan de vereiste criteria. Zorg ervoor dat het minimaal één hoofdletter, één cijfer en minimaal 8 tekens bevat.",
-    "invalidEmail": "Het ingevoerde e-mailadres is niet geldig. Zorg ervoor dat het correct is geformatteerd (bijv. voorbeeld@domein.com).",
+    "invalidEmail": "Het ingevoerde e-mailadres is niet geldig. Zorg ervoor dat het correct is geformatteerd (bijv. voorbeeld@/domein.com).",
     "invalidName": "Naam mag alleen letters, spaties, streepjes of apostrofs bevatten.",
     "registrationFailed": "Er is een fout opgetreden bij het inloggen. Probeer het later opnieuw."
   },

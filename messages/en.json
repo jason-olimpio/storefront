@@ -35,10 +35,10 @@
     "passwordLength": "Password must be at least 8 characters long.",
     "passwordUppercase": "Password must include at least one uppercase letter.",
     "passwordNumber": "Password must include at least one number.",
-    "passwordSpecial": "Password must include at least one special character (e.g. !, @, #, etc.).",
+    "passwordSpecial": "Password must include at least one special character (e.g. !, @/, #, etc.).",
     "userAlreadyExists": "An account with this email already exists. Please log in or use a different email.",
     "passwordRequirementsNotMet": "The password does not meet the required criteria. Ensure it contains at least one uppercase letter, one number, and a minimum of 8 characters.",
-    "invalidEmail": "The email address you entered is not valid. Please ensure it is correctly formatted (e.g., example@domain.com).",
+    "invalidEmail": "The email address you entered is not valid. Please ensure it is correctly formatted (e.g., example@/domain.com).",
     "invalidName": "Name can only contain letters, spaces, hyphens, or apostrophes.",
     "registrationFailed": "There was an error logging in. Please try again later."
   },

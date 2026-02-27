@@ -38,7 +38,8 @@ export const useOrdersQuery = (args: {
           { pageNumber: currentPage, pageSize: ORDERS_PAGE_SIZE },
           filter
         ),
-      staleTime: Infinity
+      staleTime: 60 * 1000, // 1 minute,
+      refetchOnMount: 'always'
     })
   }
 }

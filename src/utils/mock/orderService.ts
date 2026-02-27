@@ -38,7 +38,7 @@ export const mockOrderService = {
     const orders = mockOrderService.getOrders()
     const newOrder: OrderType = {
       ...order,
-      id: Math.max(...orders.map(o => o.id), 0) + 1,
+      id: Math.max(...orders.map(order => order.id), 0) + 1,
       date: new Date().toISOString(),
       status: OrderStatusEnum.Pending
     }
@@ -53,9 +53,9 @@ export const mockOrderService = {
     const orders = mockOrderService.getOrders()
     const orderIndex = orders.findIndex(order => order.id === id)
 
-    if (orderIndex !== -1) {
-      orders[orderIndex].status = status
-      localStorage.setItem(STORAGE_KEYS.ORDERS, JSON.stringify(orders))
-    }
+    if (orderIndex === -1) return
+
+    orders[orderIndex].status = status
+    localStorage.setItem(STORAGE_KEYS.ORDERS, JSON.stringify(orders))
   }
 }

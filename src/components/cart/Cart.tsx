@@ -2,14 +2,11 @@
 
 import { useSelector, useDispatch } from 'react-redux'
 import { useTranslations } from 'next-intl'
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect } from 'react'
 
 import { RootState, removeFromCart, updateQuantity } from '@/store'
-
 import { Pagination } from '@/components'
-
 import { useCartOrder } from '@/hooks'
-
 import { OrderRequest } from '@/types'
 
 import CartItemsList from './CartItemsList'
@@ -31,24 +28,13 @@ const Cart = () => {
 
   const orderMutation = useCartOrder()
 
-  const totalPages = useMemo(
-    () => Math.ceil(cartItems.length / ITEMS_PER_PAGE),
-    [cartItems.length]
-  )
-
+  const totalPages = Math.ceil(cartItems.length / ITEMS_PER_PAGE) || 1
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE
-  const currentItems = useMemo(
-    () => cartItems.slice(startIndex, startIndex + ITEMS_PER_PAGE),
-    [cartItems, startIndex]
-  )
+  const currentItems = cartItems.slice(startIndex, startIndex + ITEMS_PER_PAGE)
 
-  const totalPrice = useMemo(
-    () =>
-      cartItems.reduce(
-        (total, { price, quantity }) => total + price * quantity,
-        0
-      ),
-    [cartItems]
+  const totalPrice = cartItems.reduce(
+    (total, { price, quantity }) => total + price * quantity,
+    0
   )
 
   useEffect(() => {
@@ -72,6 +58,7 @@ const Cart = () => {
       }))
     }
 
+    window.dispatchEvent(new Event('orders:updated'))
     orderMutation.mutate(request)
   }
 

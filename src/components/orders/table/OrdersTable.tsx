@@ -57,6 +57,7 @@ const OrdersTable = ({ fetchOrders, isMyOrders = false }: OrdersTableProps) => {
 
   useEffect(() => {
     if (!isError) return
+
     show({ message: t(error?.message || ''), variant: 'error' })
   }, [isError, error?.message, show, t])
 

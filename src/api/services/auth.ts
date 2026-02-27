@@ -38,7 +38,7 @@ export const registerUser = async (formData: RegisterFormData) => {
   const accessToken = generateMockToken(
     formData.email,
     formData.name,
-    'User',
+    Role.User,
     newUser.id
   )
 
@@ -62,7 +62,7 @@ export const loginUser = async (formData: LoginFormData) => {
   const accessToken = generateMockToken(
     user.email || '',
     user.name || '',
-    String(user.role),
+    user.role || Role.User,
     user.id
   )
 
@@ -71,7 +71,7 @@ export const loginUser = async (formData: LoginFormData) => {
   return { accessToken, refreshToken }
 }
 
-export const fetchNewToken = async () => generateMockToken('', '', 'User')
+export const fetchNewToken = async () => generateMockToken('', '', Role.User)
 
 export const forgotPassword = async (email: string) => {
   const user = mockUserService.getUserByEmail(email)
@@ -103,7 +103,7 @@ export const resetPassword = async (request: ResetPasswordRequest) => {
 const generateMockToken = (
   email: string,
   name: string,
-  role: string,
+  role: Role,
   id?: number
 ): string => {
   const payload = {

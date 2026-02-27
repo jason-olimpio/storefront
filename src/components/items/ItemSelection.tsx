@@ -8,6 +8,8 @@ import { fetchItems } from '@/api/services'
 
 import { LoadingSpinner, Snackbar, Pagination } from '@/components'
 
+import useSnackbarState from '@/hooks/useSnackbarState'
+
 import ItemSelectionItem from './ItemSelectionItem'
 
 import { ITEMS_PAGE_SIZE } from '@/constants/pagination'
@@ -17,7 +19,7 @@ const ItemSelection = () => {
   const translations = useTranslations('ItemSelection')
 
   const [currentPage, setCurrentPage] = useState(1)
-  const [snackbarOpen, setSnackbarOpen] = useState(false)
+  const { snackbar, show, close } = useSnackbarState()
 
   const {
     data: paginatedItems,
@@ -27,23 +29,17 @@ const ItemSelection = () => {
     queryKey: ['items', currentPage, ITEMS_PAGE_SIZE],
     queryFn: () =>
       fetchItems({ pageNumber: currentPage, pageSize: ITEMS_PAGE_SIZE }),
-    staleTime: 60000
+    staleTime: 60 * 1000, // 1 minute
+    refetchOnMount: true
   })
 
   useEffect(() => {
-    if (error) setSnackbarOpen(true)
-  }, [error])
+    if (!error) return
+
+    show({ message: error.message, variant: 'error' })
+  }, [error, show])
 
   if (isLoading) return <LoadingSpinner />
-
-  if (error)
-    return (
-      <Snackbar
-        open={snackbarOpen}
-        onClose={() => setSnackbarOpen(false)}
-        message={error.message}
-      />
-    )
 
   return (
     <div className="p-10">
@@ -60,6 +56,8 @@ const ItemSelection = () => {
         totalPages={paginatedItems?.totalPages}
         onPageChange={setCurrentPage}
       />
+
+      <Snackbar {...snackbar} onClose={close} />
     </div>
   )
 }

@@ -15,6 +15,8 @@ import {
   UserList
 } from '@/components'
 
+import useSnackbarState from '@/hooks/useSnackbarState' // ✅ New import
+
 import { Role } from '@/types'
 
 const UsersPanel = () => {
@@ -26,15 +28,7 @@ const UsersPanel = () => {
     null
   )
 
-  const [snackbar, setSnackbar] = useState<{
-    open: boolean
-    message: string
-    variant: 'error' | 'info' | 'success'
-  }>({
-    open: false,
-    message: '',
-    variant: 'info'
-  })
+  const { snackbar, show, close } = useSnackbarState()
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -54,13 +48,11 @@ const UsersPanel = () => {
 
   const handleRoleChange = (params: { userId: number; roleId: Role }) => {
     updateRoleMutation.mutate(params, {
-      onSuccess: () => {
-        setSnackbar({
-          open: true,
+      onSuccess: () =>
+        show({
           message: translations('roleUpdatedSuccessfully'),
           variant: 'success'
         })
-      }
     })
   }
 
@@ -111,12 +103,7 @@ const UsersPanel = () => {
         <NoUsersMessage />
       )}
 
-      <Snackbar
-        {...snackbar}
-        onClose={() =>
-          setSnackbar(previousState => ({ ...previousState, open: false }))
-        }
-      />
+      <Snackbar {...snackbar} onClose={close} />
     </div>
   )
 }

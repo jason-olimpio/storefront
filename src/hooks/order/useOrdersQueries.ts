@@ -38,7 +38,7 @@ export const useOrdersQuery = (args: {
           { pageNumber: currentPage, pageSize: ORDERS_PAGE_SIZE },
           filter
         ),
-      staleTime: 60 * 1000, // 1 minute,
+      staleTime: 60 * 1000, // 1 minute
       refetchOnMount: 'always'
     })
   }
@@ -48,6 +48,6 @@ export const useOrderStatsQuery = (enabled: boolean) =>
   useQuery<OrderStats, Error>({
     queryKey: ['orders-stats'],
     queryFn: () => computeOrderStats(mockOrderService.getOrders()),
-    staleTime: Infinity,
+    staleTime: 60 * 1000, // 1 minute
     enabled
   })

@@ -5,13 +5,19 @@ import { useTranslations } from 'next-intl'
 import Image from 'next/image'
 import { useLocale } from 'use-intl'
 
-import { useQuery } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
+import { useQuery } from '@tanstack/react-query'
+
+import { useRouter } from '@/i18n/navigation'
 
 import { fetchOrderById } from '@/api/services'
 
 import { LoadingSpinner, Snackbar, Pagination } from '@/components/ui'
 import { OrderStatus } from '@/components/orders'
+
+import { useSnackbarState, useUser } from '@/hooks'
+
+import { Role } from '@/types'
 
 import { withBasePath } from '@/utils'
 
@@ -25,32 +31,33 @@ const OrderPage = () => {
   const translations = useTranslations('Order')
   const itemTranslations = useTranslations('Items')
 
-  const [snackbarOpen, setSnackbarOpen] = useState(false)
+  const { snackbar, show, close } = useSnackbarState()
   const [currentPage, setCurrentPage] = useState(1)
+
+  const { user } = useUser()
+  const router = useRouter()
 
   const query = useQuery({
     queryKey: ['order', id],
     queryFn: () => fetchOrderById(Number(id)),
-    staleTime: Infinity
+    staleTime: 60 * 1000,
+    refetchOnMount: true
   })
 
   const { data: order, isLoading, error } = query
 
   useEffect(() => {
-    if (error) setSnackbarOpen(true)
-  }, [error])
+    if (!error) return
+
+    show({ message: translations(error.message), variant: 'error' })
+  }, [error, show, translations])
 
   if (isLoading) return <LoadingSpinner />
 
-  if (error)
-    return (
-      <Snackbar
-        message={translations(error.message)}
-        open={snackbarOpen}
-        onClose={() => setSnackbarOpen(false)}
-        variant="error"
-      />
-    )
+  if (user?.role !== Role.Admin && order?.username !== user?.email) {
+    router.push('/not-found')
+    return
+  }
 
   const formattedDate = order
     ? new Intl.DateTimeFormat(locale, {
@@ -111,7 +118,6 @@ const OrderPage = () => {
             <th className="pb-4 p-6 font-semibold">
               {translations('preview')}
             </th>
-
             <th className="pb-4 p-6 font-semibold">{translations('items')}</th>
             <th className="pb-4 p-6 font-semibold">{translations('total')}</th>
           </tr>
@@ -163,6 +169,8 @@ const OrderPage = () => {
         totalPages={totalPages}
         onPageChange={handlePageChange}
       />
+
+      <Snackbar {...snackbar} onClose={close} />
     </div>
   )
 }

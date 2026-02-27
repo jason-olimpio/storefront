@@ -18,4 +18,5 @@ export type NotificationType = {
   isRead: boolean
   createdAt: string
   additionalData?: string
+  userId: number
 }

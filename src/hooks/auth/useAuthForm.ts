@@ -1,13 +1,14 @@
 'use client'
 
-import { useState, useEffect, FormEvent } from 'react'
+import { FormEvent, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useMutation } from '@tanstack/react-query'
 import { useTranslations, useLocale } from 'next-intl'
 import { z } from 'zod'
 
 import { useRouter } from '@/i18n/navigation'
-import useForm from '@/hooks/useForm'
+import { useForm, useSnackbarState } from '@/hooks'
+
 import { registerUser, loginUser } from '@/api/services'
 import { setAuthState, RootState } from '@/store'
 import { setTokens } from '@/utils'
@@ -43,10 +44,7 @@ export const useAuthForm = ({
     initialData
   )
 
-  const [snackbar, setSnackbar] = useState<{ message: string; open: boolean }>({
-    message: '',
-    open: false
-  })
+  const { snackbar, show, close } = useSnackbarState()
 
   useEffect(() => {
     if (isAuthenticated) router.replace('/', { locale })
@@ -64,9 +62,9 @@ export const useAuthForm = ({
       router.push('/', { locale })
     },
     onError: (error: Error) =>
-      setSnackbar({
+      show({
         message: translations(error.message),
-        open: true
+        variant: 'error'
       })
   })
 
@@ -74,7 +72,7 @@ export const useAuthForm = ({
     event.preventDefault()
 
     if (!validate()) {
-      setSnackbar(previousState => ({ ...previousState, open: false }))
+      close()
       return
     }
 
@@ -93,16 +91,13 @@ export const useAuthForm = ({
       password: DEFAULT_USER_PASSWORD
     })
 
-  const closeSnackbar = () =>
-    setSnackbar(previousState => ({ ...previousState, open: false }))
-
   return {
     formData,
     errors,
     handleChange,
     handleSubmit,
     snackbar,
-    closeSnackbar,
+    closeSnackbar: close,
     isPending: mutation.isPending,
     fillAdminCredentials,
     fillUserCredentials,

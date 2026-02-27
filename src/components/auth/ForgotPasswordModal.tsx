@@ -3,13 +3,13 @@
 import { useTranslations } from 'next-intl'
 import Image from 'next/image'
 
-import { FormEvent, useState } from 'react'
+import { FormEvent } from 'react'
 
 import { z } from 'zod'
 
 import { SubmitButton, Input, Snackbar } from '@/components'
 
-import { useForm } from '@/hooks'
+import { useForm, useSnackbarState } from '@/hooks'
 
 import { useMutation } from '@tanstack/react-query'
 
@@ -31,36 +31,28 @@ const ForgotPasswordModal = ({ onClose }: ForgotPasswordModalProps) => {
     email: ''
   })
 
-  const [snackbar, setSnackbar] = useState<{
-    open: boolean
-    message: string
-    variant: 'error' | 'info' | 'success'
-  }>({ open: false, message: '', variant: 'info' })
+  const { snackbar, show, close } = useSnackbarState()
 
   const forgotPasswordMutation = useMutation({
     mutationFn: async (email: string) => {
       const messageKey = await forgotPassword(email)
-
       return { messageKey, email }
     },
     onSuccess: ({ messageKey, email }) => {
-      setSnackbar({
-        open: true,
-        message: `${translations(messageKey)}. Check the browser console for the reset code, or use the reset code displayed below.`,
+      show({
+        message: `${translations(messageKey)} Check console (F12) for reset code.`,
         variant: 'success'
       })
 
       setTimeout(() => {
-        setSnackbar({
-          open: true,
-          message: `Reset code has been generated. Check the browser console (F12) to see it. You can also navigate to /reset-password?email=${encodeURIComponent(email)}&token=YOUR_CODE`,
+        show({
+          message: `Reset code generated. Console (F12) or /reset-password?email=${encodeURIComponent(email)}&token=YOUR_CODE`,
           variant: 'info'
         })
       }, 1000)
     },
     onError: (error: Error) => {
-      setSnackbar({
-        open: true,
+      show({
         message: translations(error.message),
         variant: 'error'
       })
@@ -73,7 +65,7 @@ const ForgotPasswordModal = ({ onClose }: ForgotPasswordModalProps) => {
     event.preventDefault()
 
     if (!validate()) {
-      setSnackbar({ ...snackbar, open: false })
+      close()
       return
     }
 
@@ -87,7 +79,7 @@ const ForgotPasswordModal = ({ onClose }: ForgotPasswordModalProps) => {
           type="button"
           onClick={onClose}
           className="absolute top-2 right-2 p-2 hover:bg-gray-100
-                   dark:hover:bg-gray-700 rounded-full transition-colors"
+                     dark:hover:bg-gray-700 rounded-full transition-colors"
         >
           <Image
             src={withBasePath('/icons/close.svg')}
@@ -125,10 +117,7 @@ const ForgotPasswordModal = ({ onClose }: ForgotPasswordModalProps) => {
           </p>
         </form>
 
-        <Snackbar
-          {...snackbar}
-          onClose={() => setSnackbar({ ...snackbar, open: false })}
-        />
+        <Snackbar {...snackbar} onClose={close} />
       </div>
     </div>
   )

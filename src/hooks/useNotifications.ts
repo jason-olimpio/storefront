@@ -2,6 +2,8 @@
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 
+import useUser from './useUser'
+
 import {
   deleteAllNotifications,
   fetchNotifications,
@@ -16,13 +18,20 @@ const useNotifications = () => {
   const { data: notifications, isLoading } = useQuery({
     queryKey: ['notifications'],
     queryFn: fetchNotifications,
-    staleTime: Infinity
+    staleTime: 60 * 1000 // 1 minute
   })
+
+  const { user } = useUser()
+
+  const filteredNotifications = notifications?.filter(
+    notification => notification.userId === user?.id
+  )
 
   const markAsReadMutation = useMutation({
     mutationFn: (id: number) => markAsRead(id),
     onMutate: async (id: number) => {
       await queryClient.cancelQueries({ queryKey: ['notifications'] })
+
       const previousNotifications = queryClient.getQueryData<
         NotificationType[]
       >(['notifications'])
@@ -69,13 +78,15 @@ const useNotifications = () => {
     }
   })
 
-  const unreadCount = notifications?.filter(
+  const unreadCount = filteredNotifications?.filter(
     notification => !notification.isRead
   ).length
-  const hasNotifications = Boolean(notifications && notifications.length > 0)
+  const hasNotifications = Boolean(
+    filteredNotifications && filteredNotifications.length > 0
+  )
 
   return {
-    notifications,
+    notifications: filteredNotifications,
     isLoading,
     unreadCount,
     hasNotifications,

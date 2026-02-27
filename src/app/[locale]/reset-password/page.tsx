@@ -3,7 +3,7 @@
 import { useLocale, useTranslations } from 'next-intl'
 import { useSearchParams } from 'next/navigation'
 
-import { FormEvent, useEffect, useState } from 'react'
+import { FormEvent, useEffect } from 'react'
 import { useMutation } from '@tanstack/react-query'
 
 import { z } from 'zod'
@@ -14,6 +14,8 @@ import { useForm } from '@/hooks'
 import { resetPassword } from '@/api/services'
 
 import { Input, Snackbar, SubmitButton } from '@/components'
+
+import useSnackbarState from '@/hooks/useSnackbarState'
 
 const ResetPassword = () => {
   const translations = useTranslations('ResetPassword')
@@ -42,15 +44,7 @@ const ResetPassword = () => {
   )
   const { password, confirmPassword } = formData
 
-  const [snackbar, setSnackbar] = useState<{
-    message: string
-    open: boolean
-    variant: 'success' | 'error' | 'info'
-  }>({
-    message: '',
-    open: false,
-    variant: 'error'
-  })
+  const { snackbar, show, close } = useSnackbarState()
 
   useEffect(() => {
     if (!token || !email) router.push('/', { locale })
@@ -67,18 +61,16 @@ const ResetPassword = () => {
       password: string
     }) => resetPassword({ email, resetCode: token, newPassword: password }),
     onSuccess: messageKey => {
-      setSnackbar({
+      show({
         message: translations(messageKey),
-        open: true,
         variant: 'success'
       })
 
       setTimeout(() => router.push('/', { locale }), 3000)
     },
     onError: (error: Error) =>
-      setSnackbar({
+      show({
         message: translations(error.message),
-        open: true,
         variant: 'error'
       })
   })
@@ -98,9 +90,8 @@ const ResetPassword = () => {
     }
 
     if (!token || !email) {
-      setSnackbar({
+      show({
         message: translations('invalidResetLink'),
-        open: true,
         variant: 'error'
       })
       return
@@ -112,9 +103,6 @@ const ResetPassword = () => {
       password: password
     })
   }
-
-  const handleSnackbarClose = () =>
-    setSnackbar(previousState => ({ ...previousState, open: false }))
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen">
@@ -145,7 +133,7 @@ const ResetPassword = () => {
         <SubmitButton label={translations('resetPassword')} className="mt-8" />
       </form>
 
-      <Snackbar {...snackbar} onClose={handleSnackbarClose} />
+      <Snackbar {...snackbar} onClose={close} />
     </div>
   )
 }

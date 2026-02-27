@@ -14,5 +14,5 @@ export const useUsersQuery = (searchTerm: string, currentPage: number) =>
         searchTerm,
         pageSize: USERS_PAGE_SIZE
       }),
-    staleTime: Infinity
+    staleTime: 60 * 1000 // 1 minute
   })

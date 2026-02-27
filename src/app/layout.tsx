@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 const RootLayout = ({ children }: { children: ReactNode }) => (
   <html>
     <body
-      className="overflow-x-hidden bg-background dark:bg-background-dark min-w-full w-fit [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar]:h-2
+      className="bg-background dark:bg-background-dark min-w-full w-fit [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar]:h-2
                    [&::-webkit-scrollbar-track]:bg-secondary [&::-webkit-scrollbar-thumb]:bg-foreground
                    dark:[&::-webkit-scrollbar-track]:bg-secondary-dark dark:[&::-webkit-scrollbar-thumb]:bg-foreground-dark
                    [&::-webkit-scrollbar-thumb]:rounded-full"

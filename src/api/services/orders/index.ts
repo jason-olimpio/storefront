@@ -9,12 +9,13 @@ import {
   OrderStatusEnum,
   OrderFilterType,
   OrdersResponse,
-  PaginationParams
+  PaginationParams,
+  NotificationType
 } from '@/types'
 import {
+  mockNotificationService,
   mockOrderService,
-  mockUserService,
-  mockNotificationService
+  mockUserService
 } from '@/utils'
 
 export const createOrder = async (
@@ -94,14 +95,15 @@ export const updateOrderStatus = async (
 
   const targetUser = mockUserService.getUserByEmail(order.username)
 
-  if (!targetUser) return
-
-  mockNotificationService.createNotification({
+  const notification: Omit<NotificationType, 'id' | 'createdAt'> = {
     messageKey: 'orderStatusUpdate',
     isRead: false,
     additionalData: JSON.stringify({
       orderId: order.id,
       status: OrderStatusEnum[newStatus]
-    })
-  })
+    }),
+    userId: Number(targetUser?.id)
+  }
+
+  mockNotificationService.createNotification(notification)
 }

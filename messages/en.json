@@ -25,8 +25,8 @@
     "accountLocked": "Account locked due to too many failed login attempts. Reset your password or contact support.",
     "loginFailed": "There was an error logging in. Please try again later.",
     "submit": "Submit",
-    "passwordResetEmailSent": "We have sent a password reset email to your registered email address. Please check your inbox.",
-    "passwordResetFailed": "There was an error while resetting your password. Please try again later.",
+    "passwordResetEmailSent": "Password reset email sent. Check your inbox.",
+    "passwordResetFailed": "Password reset failed. Please try again.",
     "quickFill": "Quick fill"
   },
   "Register": {

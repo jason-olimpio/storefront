@@ -2,7 +2,7 @@
 
 import { useTranslations } from 'next-intl'
 
-import { useState, useCallback, useRef } from 'react'
+import { useState, useRef } from 'react'
 
 import { useNotifications, useClickOutside } from '@/hooks'
 
@@ -13,6 +13,7 @@ const NotificationsDropdown = () => {
   const [isPanelOpen, setIsPanelOpen] = useState(false)
   const notificationsRef = useRef<HTMLDivElement>(null)
   const translations = useTranslations('NotificationsDropdown')
+
   const {
     notifications,
     isLoading,
@@ -24,10 +25,7 @@ const NotificationsDropdown = () => {
 
   useClickOutside([notificationsRef], () => setIsPanelOpen(false))
 
-  const toggleNotificationsPanel = useCallback(
-    () => setIsPanelOpen(isOpen => !isOpen),
-    []
-  )
+  const toggleNotificationsPanel = () => setIsPanelOpen(isOpen => !isOpen)
 
   return (
     <div className="relative" ref={notificationsRef}>

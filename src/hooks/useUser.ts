@@ -17,7 +17,7 @@ const useUser = () => {
       return user
     },
     enabled: !!token,
-    staleTime: 60000
+    staleTime: 60 * 1000 // 1 minute
   })
 
   return { user: user || null }

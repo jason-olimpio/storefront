@@ -19,6 +19,8 @@ const Navbar = () => {
   )
   const { user } = useUser()
 
+  console.log({ user })
+
   const {
     isMenuOpen,
     isDesktop,

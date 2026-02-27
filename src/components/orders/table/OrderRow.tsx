@@ -3,16 +3,16 @@
 import { useLocale } from 'use-intl'
 import Image from 'next/image'
 
+import type { QueryKey } from '@tanstack/react-query'
+
 import { Link } from '@/i18n/navigation'
 
 import OrderStatus from '@/components/orders/OrderStatus'
 import OrderItems from './OrderItems'
 
 import { useUpdateOrderStatus } from '@/hooks'
-
 import { formatRelativeDate, withBasePath } from '@/utils'
-
-import { OrderType, OrderStatusEnum, OrderFilterType } from '@/types'
+import { OrderType, OrderStatusEnum } from '@/types'
 
 type OrderRowProps = {
   order: OrderType
@@ -20,7 +20,7 @@ type OrderRowProps = {
   expandedOrderId: number | null
   onToggleExpand: (orderId: number) => void
   onStatusChangeSuccess?: () => void
-  queryKey: (string | number | OrderFilterType | null)[]
+  queryKey: QueryKey
   isFirst?: boolean
   isLast?: boolean
 }
@@ -38,27 +38,98 @@ const OrderRow = ({
   const { id, date, username, totalPrice, status, items } = order
   const locale = useLocale()
 
+  const isAdminView = !isMyOrders
+  const isExpanded = isAdminView && expandedOrderId === id
+
+  const paddingClasses = [isFirst ? 'pt-8' : '', isLast ? 'pb-12' : '']
+    .filter(Boolean)
+    .join(' ')
+
   const updateOrderStatusMutation = useUpdateOrderStatus(
     queryKey,
     onStatusChangeSuccess
   )
 
-  const formattedTraditionalDate = new Intl.DateTimeFormat(locale, {
-    day: '2-digit',
-    month: 'short',
-    year: 'numeric'
-  }).format(new Date(date))
+  const formattedTraditionalDate = isMyOrders
+    ? new Intl.DateTimeFormat(locale, {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric'
+      }).format(new Date(date))
+    : null
 
-  const formattedRelativeDate = formatRelativeDate(date, locale)
-  const paddingClasses = `${isFirst && 'pt-8'} ${isLast && 'pb-12'}`
+  const formattedRelativeDate = isAdminView
+    ? formatRelativeDate(date, locale)
+    : null
 
   const handleStatusChange = (newStatus: OrderStatusEnum) => {
     if (status === Number(newStatus)) return
 
-    updateOrderStatusMutation.mutate({
-      orderId: id,
-      newStatus
-    })
+    updateOrderStatusMutation.mutate({ orderId: id, newStatus })
+  }
+
+  const renderSecondCell = () => {
+    if (isMyOrders) return formattedTraditionalDate
+
+    return (
+      <div className="flex items-center">
+        <div
+          className="flex items-center justify-center w-8 h-8 mr-3 rounded-full
+                     bg-primary dark:bg-primary-dark text-white"
+        >
+          {username?.[0]?.toUpperCase()}
+        </div>
+        {username}
+      </div>
+    )
+  }
+
+  const renderRelativeDateCell = () => {
+    if (!isAdminView) return null
+
+    return (
+      <td className={`p-3 px-8 font-normal ${paddingClasses}`}>
+        {formattedRelativeDate}
+      </td>
+    )
+  }
+
+  const renderExpandButtonCell = () => {
+    if (!isAdminView) return null
+
+    return (
+      <td className={`p-3 px-8 ${paddingClasses}`}>
+        <button
+          onClick={() => onToggleExpand(id)}
+          className="w-4 h-4 flex items-center justify-center"
+        >
+          <Image
+            src={withBasePath('/icons/arrows/arrow-expand.svg')}
+            width={15}
+            height={15}
+            alt="Arrow expand"
+            className={`transition-transform duration-300 ${
+              isExpanded ? 'rotate-180' : 'rotate-0'
+            } ease-out dark:invert`}
+            priority
+          />
+        </button>
+      </td>
+    )
+  }
+
+  const renderExpandedItemsRow = () => {
+    if (!isExpanded) return null
+
+    return (
+      <tr>
+        <td colSpan={5} className="p-6">
+          <div className="flex justify-center items-center w-full">
+            <OrderItems items={items} />
+          </div>
+        </td>
+      </tr>
+    )
   }
 
   return (
@@ -70,28 +141,9 @@ const OrderRow = ({
           <Link href={`/orders/${id}`}>#{id}</Link>
         </td>
 
-        <td className={`p-3 px-8 ${paddingClasses}`}>
-          {isMyOrders ? (
-            formattedTraditionalDate
-          ) : (
-            <div className="flex items-center">
-              <div
-                className="flex items-center justify-center w-8 h-8 mr-3 rounded-full
-                          bg-primary dark:bg-primary-dark text-white"
-              >
-                {username?.[0]?.toUpperCase()}
-              </div>
+        <td className={`p-3 px-8 ${paddingClasses}`}>{renderSecondCell()}</td>
 
-              {username}
-            </div>
-          )}
-        </td>
-
-        {!isMyOrders && (
-          <td className={`p-3 px-8 font-normal ${paddingClasses}`}>
-            {formattedRelativeDate}
-          </td>
-        )}
+        {renderRelativeDateCell()}
 
         <td className={`p-3 px-8 font-normal ${paddingClasses}`}>
           € {totalPrice.toFixed(2)}
@@ -100,41 +152,15 @@ const OrderRow = ({
         <td className={`p-3 px-8 ${paddingClasses}`}>
           <OrderStatus
             status={status}
-            isDropdown={!isMyOrders}
+            isDropdown={isAdminView}
             onChange={handleStatusChange}
           />
         </td>
 
-        {!isMyOrders && (
-          <td className={`p-3 px-8 ${paddingClasses}`}>
-            <button
-              onClick={() => onToggleExpand(id)}
-              className="w-4 h-4 flex items-center justify-center"
-            >
-              <Image
-                src={withBasePath('/icons/arrows/arrow-expand.svg')}
-                width={15}
-                height={15}
-                alt="Arrow expand"
-                className={`transition-transform duration-300 ${
-                  expandedOrderId === id ? 'rotate-180' : 'rotate-0'
-                } ease-out dark:invert`}
-                priority
-              />
-            </button>
-          </td>
-        )}
+        {renderExpandButtonCell()}
       </tr>
 
-      {expandedOrderId === id && !isMyOrders && (
-        <tr>
-          <td colSpan={5} className="p-6">
-            <div className="flex justify-center items-center w-full">
-              <OrderItems items={items} />
-            </div>
-          </td>
-        </tr>
-      )}
+      {renderExpandedItemsRow()}
     </>
   )
 }

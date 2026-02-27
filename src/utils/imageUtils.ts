@@ -1,11 +1,3 @@
-export const getBasePath = (): string => {
-  if (typeof window === 'undefined') return ''
-
-  const isProduction = process.env.NODE_ENV === 'production'
-
-  return isProduction ? process.env.NEXT_PUBLIC_BASE_PATH || '' : ''
-}
-
 export const withBasePath = (path: string): string => {
   const basePath = getBasePath()
 
@@ -17,4 +9,12 @@ export const withBasePath = (path: string): string => {
     : basePath
 
   return `${normalizedBasePath}${normalizedPath}`
+}
+
+export const getBasePath = (): string => {
+  if (typeof window === 'undefined') return ''
+
+  const isProduction = process.env.NODE_ENV === 'production'
+
+  return isProduction ? process.env.NEXT_PUBLIC_BASE_PATH || '' : ''
 }

@@ -6,7 +6,7 @@ import { adjustStatusCount } from '@/utils/orderUtils'
 
 import { OrderStatusEnum, OrderStats } from '@/types/models/order'
 
-export const updateOrderStats = (
+const updateOrderStats = (
   queryClient: ReturnType<typeof useQueryClient>,
   previousStatus: OrderStatusEnum | null,
   newStatus: OrderStatusEnum,
@@ -27,3 +27,5 @@ export const updateOrderStats = (
     return stats
   })
 }
+
+export default updateOrderStats

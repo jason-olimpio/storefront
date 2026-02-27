@@ -60,9 +60,9 @@ export const mockUserService = {
     const users = mockUserService.getUsers()
     const userIndex = users.findIndex(user => user.id === id)
 
-    if (userIndex !== -1) {
-      users[userIndex].role = roleId
-      localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify(users))
-    }
+    if (userIndex === -1) return
+
+    users[userIndex].role = roleId
+    localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify(users))
   }
 }

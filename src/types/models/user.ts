@@ -1,8 +1,7 @@
 import { PaginationType } from '@/types/pagination'
 
-export enum Role {
-  User = 1,
-  Admin
+export type UsersResponse = PaginationType & {
+  users: User[]
 }
 
 export type User = {
@@ -12,6 +11,7 @@ export type User = {
   role?: Role
 }
 
-export type UsersResponse = PaginationType & {
-  users: User[]
+export enum Role {
+  User = 'User',
+  Admin = 'Admin'
 }

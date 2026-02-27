@@ -1,22 +1,19 @@
 'use client'
 
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { QueryKey, useMutation, useQueryClient } from '@tanstack/react-query'
 
 import { updateOrderStatus } from '@/api/services/orders'
-import { updateOrderStats } from './useOrderUpdates'
+
+import updateOrderStats from './useOrderUpdates'
 
 import {
   OrderType,
   OrderStatusEnum,
   OrdersResponse,
-  OrderFilterType,
   OrderStats
 } from '@/types/models/order'
 
-export const useUpdateOrderStatus = (
-  queryKey: (string | number | OrderFilterType | null)[],
-  onSuccess?: () => void
-) => {
+const useUpdateOrderStatus = (queryKey: QueryKey, onSuccess?: () => void) => {
   const queryClient = useQueryClient()
 
   return useMutation({
@@ -47,7 +44,7 @@ export const useUpdateOrderStatus = (
 
       const previousStatus =
         previousOrder?.status ??
-        previousOrders?.orders.find(o => o.id === orderId)?.status ??
+        previousOrders?.orders.find(order => order.id === orderId)?.status ??
         null
 
       if (previousOrders)
@@ -106,3 +103,5 @@ export const useUpdateOrderStatus = (
     }
   })
 }
+
+export default useUpdateOrderStatus

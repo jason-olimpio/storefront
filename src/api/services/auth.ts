@@ -22,31 +22,6 @@ type ResetPasswordRequest = {
   newPassword: string
 }
 
-const generateMockToken = (
-  email: string,
-  name: string,
-  role: string,
-  id?: number
-): string => {
-  const payload = {
-    id: id || 0,
-    email,
-    name,
-    role,
-    exp: Math.floor(Date.now() / 1000) + 3600
-  }
-
-  return btoa(JSON.stringify(payload))
-}
-
-const generateMockRefreshToken = (): string =>
-  btoa(
-    JSON.stringify({
-      refresh: true,
-      exp: Math.floor(Date.now() / 1000) + 604800
-    })
-  )
-
 export const registerUser = async (formData: RegisterFormData) => {
   const existingUser = mockUserService.getUserByEmail(formData.email)
 
@@ -84,11 +59,10 @@ export const loginUser = async (formData: LoginFormData) => {
 
   if (!isValidPassword) throw new Error('passwordIncorrect')
 
-  const role = user.role === 1 ? 'Admin' : 'User'
   const accessToken = generateMockToken(
     user.email || '',
     user.name || '',
-    role,
+    String(user.role),
     user.id
   )
 
@@ -125,3 +99,28 @@ export const resetPassword = async (request: ResetPasswordRequest) => {
 
   return 'passwordResetSuccess'
 }
+
+const generateMockToken = (
+  email: string,
+  name: string,
+  role: string,
+  id?: number
+): string => {
+  const payload = {
+    id: id || 0,
+    email,
+    name,
+    role,
+    exp: Math.floor(Date.now() / 1000) + 3600
+  }
+
+  return btoa(JSON.stringify(payload))
+}
+
+const generateMockRefreshToken = (): string =>
+  btoa(
+    JSON.stringify({
+      refresh: true,
+      exp: Math.floor(Date.now() / 1000) + 604800
+    })
+  )

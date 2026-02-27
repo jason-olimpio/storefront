@@ -1,6 +1,6 @@
 import UserSearchRequest from '@/types/user-search'
-import { UsersResponse } from '@/types/models/user'
-import { Role } from '@/types/models/user'
+import { UsersResponse, Role } from '@/types/models'
+
 import { mockUserService } from '@/utils'
 
 export const fetchUsers = async ({
@@ -12,6 +12,7 @@ export const fetchUsers = async ({
 
   if (searchTerm) {
     const searchLower = searchTerm.toLowerCase()
+
     users = users.filter(
       user =>
         user.email?.toLowerCase().includes(searchLower) ||
@@ -33,12 +34,11 @@ export const fetchUsers = async ({
 
 export const fetchUserRole = async (id: number): Promise<Role> => {
   const user = mockUserService.getUserById(id)
+
   if (!user?.role) throw new Error('userNotFound')
 
   return user.role
 }
 
-export const updateUserRole = async (
-  id: number,
-  roleId: number
-): Promise<void> => mockUserService.updateUserRole(id, roleId as Role)
+export const updateUserRole = async (id: number, role: Role): Promise<void> =>
+  mockUserService.updateUserRole(id, role)

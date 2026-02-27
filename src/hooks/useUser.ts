@@ -2,8 +2,6 @@
 
 import { useQuery } from '@tanstack/react-query'
 
-import { fetchUserRole } from '@/api/services/users'
-
 import { decodeUserFromToken, getAccessToken } from '@/utils'
 
 const useUser = () => {
@@ -16,11 +14,7 @@ const useUser = () => {
 
       const user = decodeUserFromToken(token)
 
-      if (!user) return
-
-      const role = await fetchUserRole(Number(user.id))
-
-      return { ...user, role }
+      return user
     },
     enabled: !!token,
     staleTime: 60000

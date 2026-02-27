@@ -8,7 +8,7 @@ import { emptyCart } from '@/store'
 import { createOrder } from '@/api/services'
 import { OrderRequest, OrderType } from '@/types'
 
-export const useCartOrder = () => {
+const useCartOrder = () => {
   const dispatch = useDispatch()
   const router = useRouter()
 
@@ -27,3 +27,5 @@ export const useCartOrder = () => {
 
   return useMutation(mutationOptions)
 }
+
+export default useCartOrder

@@ -1,12 +1,13 @@
-import { AuthTokenPayload } from '@/types'
+import { AuthTokenPayload, Role, User } from '@/types'
 
-export const decodeUserFromToken = (token: string) => {
+export const decodeUserFromToken = (token: string): User => {
   const decoded = decodeToken(token)
 
   return {
-    id: decoded.id || 0,
-    name: decoded.name || '',
-    email: decoded.email || ''
+    id: Number(decoded.id),
+    name: String(decoded.name),
+    email: String(decoded.email),
+    role: decoded.role as Role
   }
 }
 

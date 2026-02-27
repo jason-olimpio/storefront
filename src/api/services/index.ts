@@ -16,7 +16,6 @@ export {
   fetchOrderById,
   fetchMyOrders,
   fetchAllOrders,
-  fetchOrderStats,
   updateOrderStatus
 } from './orders'
 export { fetchUsers, updateUserRole } from './users'

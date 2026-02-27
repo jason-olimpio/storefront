@@ -40,6 +40,7 @@ const ForgotPasswordModal = ({ onClose }: ForgotPasswordModalProps) => {
   const forgotPasswordMutation = useMutation({
     mutationFn: async (email: string) => {
       const messageKey = await forgotPassword(email)
+
       return { messageKey, email }
     },
     onSuccess: ({ messageKey, email }) => {

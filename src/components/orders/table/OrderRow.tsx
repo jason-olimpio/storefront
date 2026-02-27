@@ -1,8 +1,9 @@
 'use client'
 
-import Link from 'next/link'
 import { useLocale } from 'use-intl'
 import Image from 'next/image'
+
+import { Link } from '@/i18n/navigation'
 
 import OrderStatus from '@/components/orders/OrderStatus'
 import OrderItems from './OrderItems'

@@ -26,7 +26,8 @@
     "loginFailed": "Er is een fout opgetreden bij het inloggen. Probeer het later opnieuw.",
     "submit": "Verzenden",
     "passwordResetEmailSent": "We hebben een e-mail voor het opnieuw instellen van uw wachtwoord verzonden naar uw geregistreerde e-mailadres. Controleer uw inbox.",
-    "passwordResetFailed": "Er is een fout opgetreden bij het opnieuw instellen van uw wachtwoord. Probeer het later opnieuw."
+    "passwordResetFailed": "Er is een fout opgetreden bij het opnieuw instellen van uw wachtwoord. Probeer het later opnieuw.",
+    "quickFill": "Snel vullen"
   },
   "Register": {
     "name": "Naam",

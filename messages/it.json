@@ -26,7 +26,8 @@
     "loginFailed": "Si è verificato un errore durante il login. Riprova più tardi.",
     "submit": "Invia",
     "passwordResetEmailSent": "Abbiamo inviato un'email per il reset della password al tuo indirizzo email registrato. Controlla la tua casella di posta.",
-    "passwordResetFailed": "Si è verificato un errore durante il reset della password. Per favore riprova più tardi."
+    "passwordResetFailed": "Si è verificato un errore durante il reset della password. Per favore riprova più tardi.",
+    "quickFill": "Riempimento veloce"
   },
   "Register": {
     "name": "Nome",

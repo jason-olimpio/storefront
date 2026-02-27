@@ -1,10 +1,10 @@
 'use client'
 
+import { useEffect, useRef, useMemo } from 'react'
+
 import { useTranslations } from 'next-intl'
 import { useLocale } from 'use-intl'
-import Link from 'next/link'
-
-import { useEffect, useRef, useMemo } from 'react'
+import { Link } from '@/i18n/navigation'
 
 import { formatRelativeDate } from '@/utils/dateUtils'
 import { getNotificationMessage } from '@/utils/notificationUtils'

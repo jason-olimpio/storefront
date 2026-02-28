@@ -25,7 +25,8 @@
     "accountLocked": "Account geblokkeerd vanwege te veel mislukte loginpogingen. Stel uw wachtwoord opnieuw in of neem contact op met de ondersteuning.",
     "loginFailed": "Er is een fout opgetreden bij het inloggen. Probeer het later opnieuw.",
     "submit": "Verzenden",
-    "passwordResetEmailSent": "We hebben een e-mail voor het opnieuw instellen van uw wachtwoord verzonden naar uw geregistreerde e-mailadres. Controleer uw inbox.",
+    "resetCodeMessage": "Let op: de resetcode wordt opgeslagen in de browserconsole. Controleer de console (F12) nadat u de code hebt verzonden.",
+    "passwordResetEmailSent": "E-mail het opnieuw invoeren van het wachtwoord. Controleer de post in aankomst.",
     "passwordResetFailed": "Er is een fout opgetreden bij het opnieuw instellen van uw wachtwoord. Probeer het later opnieuw.",
     "quickFill": "Snel vullen"
   },

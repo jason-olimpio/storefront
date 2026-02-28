@@ -1,18 +1,17 @@
 'use client'
 
 import { useEffect } from 'react'
-import { useRouter } from '@/i18n/navigation'
+
+import { useRouter } from 'next/navigation'
+
 import { routing } from '@/i18n/routing'
 
-const Root = () => {
+const Page = () => {
   const router = useRouter()
 
-  useEffect(
-    () => router.replace('/', { locale: routing.defaultLocale }),
-    [router]
-  )
+  useEffect(() => router.replace(`./${routing.defaultLocale}`), [router])
 
   return
 }
 
-export default Root
+export default Page

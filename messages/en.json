@@ -25,7 +25,8 @@
     "accountLocked": "Account locked due to too many failed login attempts. Reset your password or contact support.",
     "loginFailed": "There was an error logging in. Please try again later.",
     "submit": "Submit",
-    "passwordResetEmailSent": "Password reset email sent. Check your inbox.",
+    "resetCodeMessage": "Note: the reset code will be logged to the browser console. Check the console (F12) after submitting.",
+    "passwordResetEmailSent": "Email di reset inviata. Controlla la tua posta in arrivo.",
     "passwordResetFailed": "Password reset failed. Please try again.",
     "quickFill": "Quick fill"
   },

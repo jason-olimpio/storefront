@@ -112,8 +112,7 @@ const ForgotPasswordModal = ({ onClose }: ForgotPasswordModalProps) => {
           />
 
           <p className="text-xs text-foreground-secondary dark:text-foreground-secondary-dark mt-4 text-center">
-            Note: the reset code will be logged to the browser console. Check
-            the console (F12) after submitting.
+            {translations('resetCodeMessage')}
           </p>
         </form>
 

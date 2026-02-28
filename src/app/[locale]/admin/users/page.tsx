@@ -47,6 +47,10 @@ const UsersPanel = () => {
 
   const { user: currentUser } = useUser()
 
+  const filteredUsers = paginatedUsers?.users.filter(
+    user => user.id !== currentUser?.id
+  )
+
   const updateRoleMutation = useUsersMutation(searchTerm, currentPage)
 
   const handleRoleChange = (params: { userId: number; roleId: Role }) => {
@@ -94,9 +98,7 @@ const UsersPanel = () => {
 
       {paginatedUsers?.users.length ? (
         <UserList
-          users={paginatedUsers.users.filter(
-            user => user.id !== currentUser?.id
-          )}
+          users={filteredUsers}
           openDropdownIndex={openDropdownIndex}
           onToggleDropdown={handleToggleDropdown}
           onRoleChange={handleRoleChange}

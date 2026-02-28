@@ -18,6 +18,7 @@ import {
 import useSnackbarState from '@/hooks/useSnackbarState' // ✅ New import
 
 import { Role } from '@/types'
+import { useUser } from '@/hooks'
 
 const UsersPanel = () => {
   const translations = useTranslations('UsersPanel')
@@ -43,6 +44,8 @@ const UsersPanel = () => {
     searchTerm,
     currentPage
   )
+
+  const { user: currentUser } = useUser()
 
   const updateRoleMutation = useUsersMutation(searchTerm, currentPage)
 
@@ -91,7 +94,9 @@ const UsersPanel = () => {
 
       {paginatedUsers?.users.length ? (
         <UserList
-          users={paginatedUsers.users}
+          users={paginatedUsers.users.filter(
+            user => user.id !== currentUser?.id
+          )}
           openDropdownIndex={openDropdownIndex}
           onToggleDropdown={handleToggleDropdown}
           onRoleChange={handleRoleChange}

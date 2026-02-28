@@ -1,0 +1,1 @@
+(globalThis.TURBOPACK||(globalThis.TURBOPACK=[])).push(["object"==typeof document?document.currentScript:void 0,80154,r=>{"use strict";var e=r.i(43476);r.i(62977);var s=r.i(82062);r.i(42104);var i=r.i(29799);r.s(["default",0,()=>(0,e.jsx)(i.OrdersTable,{fetchOrders:s.fetchMyOrders,isMyOrders:!0})])}]);

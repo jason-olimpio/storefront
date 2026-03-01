@@ -17,7 +17,7 @@ const MobileMenu = ({
   menuRef,
   onLinkClick
 }: MobileMenuProps) => {
-  if (!isOpen) return null
+  if (!isOpen) return
 
   return (
     <div

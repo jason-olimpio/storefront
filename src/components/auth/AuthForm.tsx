@@ -2,68 +2,50 @@
 
 import { useTranslations } from 'next-intl'
 import { z } from 'zod'
-
 import { useState } from 'react'
+import { Snackbar, SubmitButton, ToggleButton } from '@/components'
 
-import { useAuthForm } from '@/hooks'
-
-import { Snackbar, SubmitButton, ActionLink } from '@/components'
-
+import useAuthForm from '@/hooks/auth/useAuthForm'
 import ForgotPasswordModal from './ForgotPasswordModal'
 import AuthFormFields from './AuthFormFields'
 import QuickFillButtons from './QuickFillButtons'
 
-type AuthFormProps = {
-  mode: 'register' | 'login'
+export type AuthMode = 'register' | 'login'
+export type AuthFormData = {
+  email: string
+  password: string
+  name?: string
 }
 
-const createLoginSchema = () =>
-  z.object({
-    email: z.email(),
-    password: z.string()
-  })
+const createSchema = (mode: AuthMode, tRegister: any) =>
+  mode === 'register'
+    ? z.object({
+        email: z.email(),
+        password: z
+          .string()
+          .min(8, tRegister('passwordLength'))
+          .regex(/[A-Z]/, tRegister('passwordUppercase'))
+          .regex(/\d/, tRegister('passwordNumber'))
+          .regex(/[^a-zA-Z0-9]/, tRegister('passwordSpecial')),
+        name: z.string().regex(/^[a-zA-Z0-9 ]{3,50}$/, tRegister('invalidName'))
+      })
+    : z.object({
+        email: z.email(),
+        password: z.string()
+      })
 
-const createRegisterSchema = (
-  invalidName: string,
-  passwordLength: string,
-  passwordUppercase: string,
-  passwordNumber: string,
-  passwordSpecial: string
-) =>
-  z
-    .object({
-      email: z.email(),
-      password: z.string()
-    })
-    .extend({
-      name: z.string().regex(/^[a-zA-Z0-9 ]{3,50}$/, invalidName),
-      password: z
-        .string()
-        .min(8, passwordLength)
-        .regex(/[A-Z]/, passwordUppercase)
-        .regex(/\d/, passwordNumber)
-        .regex(/[^a-zA-Z0-9]/, passwordSpecial)
-    })
-
-const AuthForm = ({ mode }: AuthFormProps) => {
-  const isRegister = mode === 'register'
-  const translations = useTranslations(isRegister ? 'Register' : 'Login')
-  const registerTranslations = useTranslations('Register')
-  const loginTranslations = useTranslations('Login')
-
-  const schema = isRegister
-    ? createRegisterSchema(
-        registerTranslations('invalidName'),
-        registerTranslations('passwordLength'),
-        registerTranslations('passwordUppercase'),
-        registerTranslations('passwordNumber'),
-        registerTranslations('passwordSpecial')
-      )
-    : createLoginSchema()
-
-  const initialData = isRegister
+const getInitialData = (mode: AuthMode): AuthFormData =>
+  mode === 'register'
     ? { email: '', password: '', name: '' }
     : { email: '', password: '' }
+
+const AuthForm = () => {
+  const [mode, setMode] = useState<AuthMode>('login')
+  const loginTranslations = useTranslations('Login')
+  const registerTranslations = useTranslations('Register')
+
+  const schema = createSchema(mode, registerTranslations)
+  const initialData = getInitialData(mode)
 
   const {
     formData,
@@ -75,16 +57,26 @@ const AuthForm = ({ mode }: AuthFormProps) => {
     isPending,
     fillAdminCredentials,
     fillUserCredentials,
-    isAuthenticated
-  } = useAuthForm({
-    isRegister,
+    isAuthenticated,
+    setFormData
+  } = useAuthForm<AuthFormData>({
+    mode,
     schema,
     initialData
   })
 
   const [forgotPasswordOpen, setForgotPasswordOpen] = useState(false)
 
+  const toggleMode = () => {
+    const newMode = mode === 'register' ? 'login' : 'register'
+
+    setMode(newMode)
+    setFormData(getInitialData(newMode))
+  }
+
   if (isAuthenticated) return
+
+  const isRegister = mode === 'register'
 
   return (
     <div className="flex items-center justify-center min-h-screen w-screen">
@@ -103,19 +95,27 @@ const AuthForm = ({ mode }: AuthFormProps) => {
           />
         )}
 
-        <ActionLink
-          introText={translations(isRegister ? 'existingUser' : 'newUser')}
-          linkText={
+        <ToggleButton
+          introText={
             isRegister
-              ? loginTranslations('login').toLowerCase()
-              : translations('registerNow')
+              ? registerTranslations('existingUser')
+              : loginTranslations('newUser')
           }
-          href={isRegister ? '/' : '/register'}
-          className="mt-4"
+          buttonText={
+            isRegister
+              ? registerTranslations('login')
+              : loginTranslations('registerNow')
+          }
+          onClick={toggleMode}
+          className="mt-4 cursor-pointer hover:opacity-80"
         />
 
         <SubmitButton
-          label={translations(isRegister ? 'register' : 'login')}
+          label={
+            isRegister
+              ? registerTranslations('register')
+              : loginTranslations('login')
+          }
           className="mt-6"
           disabled={isPending}
         />
@@ -124,10 +124,9 @@ const AuthForm = ({ mode }: AuthFormProps) => {
           <button
             type="button"
             onClick={() => setForgotPasswordOpen(true)}
-            className="mt-6 uppercase text-link dark:text-link-dark
-                       text-sm underline font-medium decoration-0"
+            className="mt-6 uppercase text-link dark:text-link-dark text-sm underline font-medium decoration-0"
           >
-            {translations('forgottenPassword')}
+            {loginTranslations('forgottenPassword')}
           </button>
         )}
       </form>
@@ -141,6 +140,4 @@ const AuthForm = ({ mode }: AuthFormProps) => {
   )
 }
 
-export const RegisterForm = () => <AuthForm mode="register" />
-export const LoginForm = () => <AuthForm mode="login" />
 export default AuthForm

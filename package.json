@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "build:gh-pages": "cross-env GITHUB_PAGES=true NEXT_PUBLIC_BASE_PATH=/storefront npm run build",
-    "deploy": "npm run build:gh-pages && gh-pages -d out --add",
+    "deploy": "npm run build:gh-pages && gh-pages -d out --add --dotfiles --nojekyll",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
     "lint:next": "next lint",

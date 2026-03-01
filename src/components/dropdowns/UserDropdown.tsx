@@ -3,8 +3,6 @@
 import { useRef, useState } from 'react'
 import { useDispatch } from 'react-redux'
 
-import { useLocale } from 'next-intl'
-
 import { useRouter } from '@/i18n/navigation'
 
 import { setAuthState } from '@/store'
@@ -18,7 +16,6 @@ const UserDropdown = () => {
   const [isOpen, setIsOpen] = useState(false)
   const dispatch = useDispatch()
   const router = useRouter()
-  const locale = useLocale()
 
   const { user } = useUser()
 
@@ -29,7 +26,7 @@ const UserDropdown = () => {
   const handleLogout = () => {
     removeTokens()
     dispatch(setAuthState(false))
-    router.push('/', { locale })
+    router.push('/')
   }
 
   const toggleDropdown = () => setIsOpen(isOpen => !isOpen)

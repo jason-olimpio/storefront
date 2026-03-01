@@ -85,7 +85,7 @@ const OrderRow = ({
   }
 
   const renderRelativeDateCell = () => {
-    if (!isAdminView) return null
+    if (!isAdminView) return
 
     return (
       <td className={`p-3 px-8 font-normal ${paddingClasses}`}>
@@ -95,7 +95,7 @@ const OrderRow = ({
   }
 
   const renderExpandButtonCell = () => {
-    if (!isAdminView) return null
+    if (!isAdminView) return
 
     return (
       <td className={`p-3 px-8 ${paddingClasses}`}>
@@ -119,7 +119,7 @@ const OrderRow = ({
   }
 
   const renderExpandedItemsRow = () => {
-    if (!isExpanded) return null
+    if (!isExpanded) return
 
     return (
       <tr>

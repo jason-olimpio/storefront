@@ -23,13 +23,13 @@ const useOrdersFilterParam = () => {
   return { filter, filterRaw, setFilter }
 }
 
-const parseFilterParam = (raw: string | null): OrderFilterType | null => {
-  if (!raw) return null
+const parseFilterParam = (raw: string | null): OrderFilterType | undefined => {
+  if (!raw) return
 
   try {
     return JSON.parse(raw) as OrderFilterType
   } catch {
-    return null
+    return
   }
 }
 

@@ -1,12 +1,12 @@
 'use client'
 
-import { ReactNode, useEffect, useState } from 'react'
-import { useLocale } from 'next-intl'
+import type { ReactNode } from 'react'
+import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 
 import { usePathname, useRouter } from '@/i18n/navigation'
-import { RootState } from '@/store'
-import { LoginForm, LoadingSpinner, BackButton } from '@/components'
+import type { RootState } from '@/store'
+import { AuthForm, LoadingSpinner, BackButton } from '@/components'
 import { getAccessToken } from '@/utils'
 
 type ProtectedContentProps = {
@@ -14,7 +14,6 @@ type ProtectedContentProps = {
 }
 
 const ProtectedContent = ({ children }: ProtectedContentProps) => {
-  const locale = useLocale()
   const pathname = usePathname()
   const router = useRouter()
 
@@ -24,7 +23,8 @@ const ProtectedContent = ({ children }: ProtectedContentProps) => {
 
   const [isAuthStateSynced, setIsAuthStateSynced] = useState(false)
 
-  const isAuthPage = pathname === '/register' || pathname === '/reset-password'
+  const isAuthPage =
+    pathname.endsWith('/register') || pathname.endsWith('/reset-password')
 
   useEffect(() => {
     const tokenExists = !!getAccessToken()
@@ -32,14 +32,15 @@ const ProtectedContent = ({ children }: ProtectedContentProps) => {
   }, [isAuthenticated])
 
   useEffect(() => {
-    if (isAuthenticated && isAuthPage) router.replace('/', { locale })
-  }, [isAuthenticated, isAuthPage, router, locale])
+    if (isAuthenticated && isAuthPage) router.replace('/')
+  }, [isAuthenticated, isAuthPage, router])
 
   if (!isAuthStateSynced) return <LoadingSpinner />
 
   if (!isAuthenticated) {
     if (isAuthPage) return <>{children}</>
-    return <LoginForm />
+
+    return <AuthForm />
   }
 
   if (isAuthPage) return

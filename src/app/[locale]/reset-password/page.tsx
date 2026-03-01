@@ -3,7 +3,7 @@
 import { useLocale, useTranslations } from 'next-intl'
 import { useSearchParams } from 'next/navigation'
 
-import { FormEvent, useEffect } from 'react'
+import { ComponentProps, useEffect } from 'react'
 import { useMutation } from '@tanstack/react-query'
 
 import { z } from 'zod'
@@ -47,7 +47,7 @@ const ResetPassword = () => {
   const { snackbar, show, close } = useSnackbarState()
 
   useEffect(() => {
-    if (!token || !email) router.push('/', { locale })
+    if (!token || !email) router.push('/')
   }, [token, email, router, locale])
 
   const mutation = useMutation({
@@ -66,7 +66,7 @@ const ResetPassword = () => {
         variant: 'success'
       })
 
-      setTimeout(() => router.push('/', { locale }), 3000)
+      setTimeout(() => router.push('/'), 3000)
     },
     onError: (error: Error) =>
       show({
@@ -75,7 +75,7 @@ const ResetPassword = () => {
       })
   })
 
-  const handleSubmit = async (event: FormEvent) => {
+  const handleSubmit: ComponentProps<'form'>['onSubmit'] = async event => {
     event.preventDefault()
 
     if (!validate()) return

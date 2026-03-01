@@ -1,30 +1,26 @@
 import { useTranslations } from 'next-intl'
 
+import { ChangeEvent } from 'react'
+
 import { Input } from '@/components'
 
-type AuthFormFieldsProps = {
+import { AuthFormData } from './AuthForm'
+
+type AuthFormFieldsProps<TForm extends Record<string, any>> = {
   isRegister: boolean
-  formData: {
-    email: string
-    password: string
-    name?: string
-  }
-  errors: {
-    email?: string
-    password?: string
-    name?: string
-  }
+  formData: AuthFormData
+  errors: Partial<Record<keyof TForm, string>>
   onFieldChange: (
-    field: string
-  ) => (event: React.ChangeEvent<HTMLInputElement>) => void
+    field: keyof TForm
+  ) => (event: ChangeEvent<HTMLInputElement>) => void
 }
 
-const AuthFormFields = ({
+const AuthFormFields = <TForm extends AuthFormData>({
   isRegister,
   formData,
   errors,
   onFieldChange
-}: AuthFormFieldsProps) => {
+}: AuthFormFieldsProps<TForm>) => {
   const translations = useTranslations(isRegister ? 'Register' : 'Login')
 
   return (

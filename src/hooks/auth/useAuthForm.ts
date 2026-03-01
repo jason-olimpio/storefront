@@ -1,17 +1,18 @@
 'use client'
 
-import { FormEvent, useEffect } from 'react'
+import type { ComponentProps } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { useMutation } from '@tanstack/react-query'
-import { useTranslations, useLocale } from 'next-intl'
-import { z } from 'zod'
-
+import z from 'zod'
 import { useRouter } from '@/i18n/navigation'
+
 import { useForm, useSnackbarState } from '@/hooks'
 
-import { registerUser, loginUser } from '@/api/services'
-import { setAuthState, RootState } from '@/store'
-import { setTokens } from '@/utils'
+import { setAuthState, type RootState } from '@/store'
+
+import useAuthMutation from './useAuthMutation'
+
+import { AuthFormData, AuthMode } from '@/components/auth/AuthForm'
+
 import {
   DEFAULT_ADMIN_EMAIL,
   DEFAULT_ADMIN_PASSWORD,
@@ -19,21 +20,21 @@ import {
   DEFAULT_USER_PASSWORD
 } from '@/components/auth/constants'
 
-type UseAuthFormProps = {
-  isRegister: boolean
-  schema: z.ZodType<any>
-  initialData: any
+import { setTokens } from '@/utils'
+
+type UseAuthFormProps<TForm extends AuthFormData> = {
+  mode: AuthMode
+  schema: z.ZodType<TForm>
+  initialData: TForm
 }
 
-export const useAuthForm = ({
-  isRegister,
+const useAuthForm = <TForm extends AuthFormData>({
+  mode,
   schema,
   initialData
-}: UseAuthFormProps) => {
-  const translations = useTranslations(isRegister ? 'Register' : 'Login')
+}: UseAuthFormProps<TForm>) => {
   const dispatch = useDispatch()
   const router = useRouter()
-  const locale = useLocale()
 
   const isAuthenticated = useSelector(
     (state: RootState) => state.auth.isAuthenticated
@@ -46,29 +47,20 @@ export const useAuthForm = ({
 
   const { snackbar, show, close } = useSnackbarState()
 
-  useEffect(() => {
-    if (isAuthenticated) router.replace('/', { locale })
-  }, [isAuthenticated, router, locale])
-
-  const mutation = useMutation({
-    mutationFn: (data: any) =>
-      isRegister ? registerUser(data) : loginUser(data),
+  const mutation = useAuthMutation(mode, {
     onSuccess: ({ accessToken, refreshToken }) => {
-      if (!accessToken || !refreshToken) return
-
-      setTokens(String(accessToken), String(refreshToken))
+      setTokens(accessToken, refreshToken)
       dispatch(setAuthState(true))
-
-      router.push('/', { locale })
+      router.replace('/')
     },
-    onError: (error: Error) =>
+    onErrorMessage: message =>
       show({
-        message: translations(error.message),
+        message,
         variant: 'error'
       })
   })
 
-  const handleSubmit = (event: FormEvent) => {
+  const handleSubmit: ComponentProps<'form'>['onSubmit'] = event => {
     event.preventDefault()
 
     if (!validate()) {
@@ -81,12 +73,14 @@ export const useAuthForm = ({
 
   const fillAdminCredentials = () =>
     setFormData({
+      ...formData,
       email: DEFAULT_ADMIN_EMAIL,
       password: DEFAULT_ADMIN_PASSWORD
     })
 
   const fillUserCredentials = () =>
     setFormData({
+      ...formData,
       email: DEFAULT_USER_EMAIL,
       password: DEFAULT_USER_PASSWORD
     })
@@ -101,6 +95,9 @@ export const useAuthForm = ({
     isPending: mutation.isPending,
     fillAdminCredentials,
     fillUserCredentials,
-    isAuthenticated
+    isAuthenticated,
+    setFormData
   }
 }
+
+export default useAuthForm

@@ -3,7 +3,7 @@
 import { useTranslations } from 'next-intl'
 import Image from 'next/image'
 
-import { FormEvent } from 'react'
+import { ComponentProps } from 'react'
 
 import { z } from 'zod'
 
@@ -61,7 +61,7 @@ const ForgotPasswordModal = ({ onClose }: ForgotPasswordModalProps) => {
     }
   })
 
-  const handleSubmit = (event: FormEvent) => {
+  const handleSubmit: ComponentProps<'form'>['onSubmit'] = event => {
     event.preventDefault()
 
     if (!validate()) {

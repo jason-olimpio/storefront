@@ -96,13 +96,13 @@ const UsersPanel = () => {
 
       <hr className="my-10 border-gray-300 dark:border-gray-600" />
 
-      {paginatedUsers?.users.length ? (
+      {filteredUsers?.length ? (
         <UserList
           users={filteredUsers}
           openDropdownIndex={openDropdownIndex}
           onToggleDropdown={handleToggleDropdown}
           onRoleChange={handleRoleChange}
-          totalPages={paginatedUsers.totalPages}
+          totalPages={paginatedUsers?.totalPages}
           currentPage={currentPage}
           onPageChange={handlePageChange}
         />

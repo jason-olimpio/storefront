@@ -9,7 +9,7 @@ type UserListProps = {
   openDropdownIndex: number | null
   onToggleDropdown: (index: number) => void
   onRoleChange: (params: { userId: number; roleId: Role }) => void
-  totalPages: number
+  totalPages?: number
   currentPage: number
   onPageChange: (page: number) => void
 }

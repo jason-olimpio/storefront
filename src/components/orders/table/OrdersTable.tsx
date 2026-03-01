@@ -87,7 +87,7 @@ const OrdersTable = ({ fetchOrders, isMyOrders = false }: OrdersTableProps) => {
   const totalPages = paginatedOrders?.totalPages ?? 1
 
   const renderStats = () => {
-    if (!showStats) return null
+    if (!showStats) return
 
     return (
       <div className="flex justify-center lg:justify-start space-x-6 mb-8">

@@ -1,4 +1,4 @@
-export { default as AuthForm, LoginForm, RegisterForm } from './AuthForm'
+export { default as AuthForm } from './AuthForm'
 export { default as AuthFormFields } from './AuthFormFields'
 export { default as ForgotPasswordModal } from './ForgotPasswordModal'
 export { default as ProtectedContent } from './ProtectedContent'

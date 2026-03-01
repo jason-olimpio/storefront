@@ -97,7 +97,7 @@ export const resetPassword = async (request: ResetPasswordRequest) => {
   mockPasswordService.updatePassword(request.email, request.newPassword)
   mockResetCodeService.clearResetCode(request.email)
 
-  return 'passwordResetSuccess'
+  return 'passwordResetSuccessful'
 }
 
 const generateMockToken = (

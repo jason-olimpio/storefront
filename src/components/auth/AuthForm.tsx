@@ -103,7 +103,7 @@ const AuthForm = () => {
           }
           buttonText={
             isRegister
-              ? registerTranslations('login')
+              ? loginTranslations('login').toLowerCase()
               : loginTranslations('registerNow')
           }
           onClick={toggleMode}

@@ -74,16 +74,11 @@ export const loginUser = async (formData: LoginFormData) => {
 export const fetchNewToken = async () => generateMockToken('', '', Role.User)
 
 export const forgotPassword = async (email: string) => {
-  const user = mockUserService.getUserByEmail(email)
+  const users = mockUserService.getUsers()
 
-  if (!user) {
-    mockResetCodeService.generateResetCode(email)
-    return 'passwordResetEmailSent'
-  }
+  if (!users.some(user => user.email === email)) throw new Error('userNotFound')
 
-  mockResetCodeService.generateResetCode(email)
-
-  return 'passwordResetEmailSent'
+  return mockResetCodeService.generateResetCode(email)
 }
 
 export const resetPassword = async (request: ResetPasswordRequest) => {

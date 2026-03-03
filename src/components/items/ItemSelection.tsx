@@ -6,13 +6,13 @@ import { useTranslations } from 'next-intl'
 
 import { fetchItems } from '@/api/services'
 
-import { LoadingSpinner, Snackbar, Pagination } from '@/components'
+import { LoadingSpinner, Snackbar, PageNavigator } from '@/components'
 
 import useSnackbarState from '@/hooks/useSnackbarState'
 
 import ItemSelectionItem from './ItemSelectionItem'
 
-import { ITEMS_PAGE_SIZE } from '@/constants/pagination'
+import { ITEMS_PAGE_SIZE } from '@/components/ui/pagination'
 import { ItemsResponse } from '@/types'
 
 const ItemSelection = () => {
@@ -51,7 +51,7 @@ const ItemSelection = () => {
         ))}
       </ul>
 
-      <Pagination
+      <PageNavigator
         currentPage={currentPage}
         totalPages={paginatedItems?.totalPages}
         onPageChange={setCurrentPage}

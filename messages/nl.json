@@ -25,7 +25,6 @@
     "accountLocked": "Account geblokkeerd vanwege te veel mislukte loginpogingen. Stel uw wachtwoord opnieuw in of neem contact op met de ondersteuning.",
     "loginFailed": "Er is een fout opgetreden bij het inloggen. Probeer het later opnieuw.",
     "submit": "Verzenden",
-    "resetCodeMessage": "Let op: de resetcode wordt opgeslagen in de browserconsole. Controleer de console (F12) nadat u de code hebt verzonden.",
     "passwordResetEmailSent": "E-mail het opnieuw invoeren van het wachtwoord. Controleer de post in aankomst.",
     "passwordResetFailed": "Er is een fout opgetreden bij het opnieuw instellen van uw wachtwoord. Probeer het later opnieuw.",
     "quickFill": "Snel vullen"
@@ -53,32 +52,43 @@
     "invalidResetToken": "De reset-token is ongeldig. Vraag een nieuwe aan.",
     "resetTokenExpired": "De reset-token is verlopen. Vraag een nieuwe aan.",
     "passwordRequirementsNotMet": "Het wachtwoord voldoet niet aan de vereiste criteria.",
+    "invalidResetCode": "Ongeldige of verlopen resetcode. Vraag een nieuwe wachtwoordreset aan.",
     "passwordResetFailed": "Er is een fout opgetreden bij het opnieuw instellen van uw wachtwoord. Probeer het later opnieuw."
   },
   "ItemSelection": {
     "selectItem": "Selecteer het artikel om te bestellen"
   },
   "Items": {
-    "ez_barbell_name": "EZ Haltersstang",
-    "ez_barbell_description": "Gebogen halterstang voor armtraining. Perfect voor biceps en triceps.",
-    "dumbbells_set_name": "Halter Set",
-    "dumbbells_set_description": "Een collectie vrije gewichten waarmee u verschillende krachtoefeningen kunt uitvoeren.",
-    "kettlebell_name": "Kettlebell",
-    "kettlebell_description": "Een ideaal fitnesshulpmiddel voor het opbouwen van kracht, het verbeteren van functionele beweging en het verbeteren van prestaties.",
-    "triceps_row_name": "Triceps Touw",
-    "triceps_row_description": "Een fitnessaccessoire gemaakt van een duurzaam, variabel lengte touw, ontworpen voor veelzijdige training en betere prestaties.",
-    "angle_bar_name": "Hoekstang",
-    "angle_bar_description": "Een veelzijdig fitnesshulpmiddel, meestal bevestigd aan een kabelmachine.",
-    "lat_machine_bar_name": "Lat Machine Stang",
-    "lat_machine_bar_description": "De lat machine stang is een essentieel fitnesshulpmiddel voor wie zijn rug wil trainen.",
-    "pull_up_bar_name": "Optrekstang",
-    "pull_up_bar_description": "De optrekstang is een fitnesshulpmiddel bestaande uit een horizontale stang bevestigd aan een steun.",
-    "jumping_rope_name": "Springtouw",
-    "jumping_rope_description": "Bestaande uit een touw met handvatten dat onder de voeten wordt gedraaid.",
-    "weight_disc_name": "Gewichtsschijf",
-    "weight_disc_description": "Metalen of rubberen cilinders met een centraal gat waardoor ze aan halterstangen kunnen worden bevestigd.",
-    "creatine_name": "Creatine",
-    "creatine_description": "Creatine is een natuurlijke verbinding die helpt de energie te verhogen tijdens activiteiten met hoge intensiteit, waardoor kracht, vermogen en spiergroei worden verbeterd."
+    "t_shirt_name": "T-shirt",
+    "t_shirt_description": "Comfortabel katoenen T-shirt verkrijgbaar in verschillende kleuren en maten voor dagelijks casual gebruik.",
+    "mug_name": "Keramieken mok",
+    "mug_description": "Stevige 12oz keramieken mok met ergonomische handgreep, perfect voor koffie of thee.",
+    "notebook_name": "Spiraalnotitieboek",
+    "notebook_description": "Notitieboek met 100 pagina's, gelinieerd met stevige kaft voor notities, journaling of schetsen.",
+    "phone_case_name": "Telefoonhoesje",
+    "phone_case_description": "Schokabsorberende beschermhoes compatibel met populaire smartphone modellen.",
+    "backpack_name": "Dagelijkse rugzak",
+    "backpack_description": "Waterafstotende rugzak met meerdere vakken voor laptop, boeken en dagelijkse benodigdheden.",
+    "water_bottle_name": "Geïsoleerde waterfles",
+    "water_bottle_description": "RVS 32oz fles houdt dranken 24 uur koud of 12 uur warm.",
+    "sunglasses_name": "Gepolariseerde zonnebril",
+    "sunglasses_description": "Zonnebril met UV400-bescherming en lichte monturen voor buitensporten.",
+    "headphones_name": "Draadloze koptelefoon",
+    "headphones_description": "Bluetooth over-ear koptelefoon met ruisonderdrukking en 20 uur batterijduur.",
+    "kitchen_towel_name": "Keukendoek set",
+    "kitchen_towel_description": "Absorberende katoenen doek set (3-stuks) voor afdrogen van vaat en aanrechten.",
+    "wallet_name": "Leren portemonnee",
+    "wallet_description": "Platte RFID-blokkerende portemonnee met kaartvakjes en briefgeldvak.",
+    "hoodie_name": "Hoodie",
+    "hoodie_description": "Lekker warme fleece hoodie met verstelbare trekkoordkap.",
+    "cap_name": "Baseballpet",
+    "cap_description": "Verstelbare snapback pet met geborduurd logo.",
+    "tote_bag_name": "Canvas boodschappentas",
+    "tote_bag_description": "Robuuste katoenen tote voor boodschappen en dagelijks gebruik.",
+    "sticky_notes_name": "Post-its",
+    "sticky_notes_description": "100 velletjes herpositioneerbare notities in verschillende kleuren.",
+    "pen_set_name": "Pen set",
+    "pen_set_description": "Set van 5 soepel schrijvende gel pennen in meerdere kleuren."
   },
   "Cart": {
     "myOrder": "Mijn bestelling",
@@ -157,4 +167,3 @@
     "user": "Gebruiker"
   }
 }
-

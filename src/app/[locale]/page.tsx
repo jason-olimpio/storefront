@@ -16,7 +16,7 @@ const Index = () => {
       </div>
 
       {cartItems.length > 0 && (
-        <div>
+        <div className="min-h-screen">
           <Cart />
         </div>
       )}

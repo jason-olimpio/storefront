@@ -19,11 +19,6 @@ export const mockResetCodeService = {
 
     localStorage.setItem(STORAGE_KEYS.RESET_CODES, JSON.stringify(resetCodes))
 
-    console.log(`🔑 Password reset code for ${email}: ${code}`)
-    console.log(
-      `🔗 Reset URL: /reset-password?email=${encodeURIComponent(email)}&token=${code}`
-    )
-
     return code
   },
 

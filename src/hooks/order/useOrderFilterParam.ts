@@ -1,7 +1,7 @@
 'use client'
 
-import { usePathname, useSearchParams } from 'next/navigation'
-import { useRouter } from '@/i18n/navigation'
+import { useSearchParams } from 'next/navigation'
+import { useRouter, usePathname } from '@/i18n/navigation'
 
 import type { OrderFilterType } from '@/types'
 
@@ -16,6 +16,7 @@ const useOrdersFilterParam = () => {
 
   const setFilter = (newFilter: OrderFilterType) => {
     const params = new URLSearchParams(searchParams.toString())
+
     params.set('filter', JSON.stringify(newFilter))
     router.push(`${pathname}?${params.toString()}`)
   }
@@ -26,11 +27,7 @@ const useOrdersFilterParam = () => {
 const parseFilterParam = (raw: string | null): OrderFilterType | undefined => {
   if (!raw) return
 
-  try {
-    return JSON.parse(raw) as OrderFilterType
-  } catch {
-    return
-  }
+  return JSON.parse(raw) as OrderFilterType
 }
 
 export default useOrdersFilterParam

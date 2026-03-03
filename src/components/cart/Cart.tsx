@@ -5,7 +5,7 @@ import { useTranslations } from 'next-intl'
 import { useState, useEffect } from 'react'
 
 import { RootState, removeFromCart, updateQuantity } from '@/store'
-import { Pagination } from '@/components'
+import { PageNavigator } from '@/components'
 import { useCartOrder } from '@/hooks'
 import { OrderRequest } from '@/types'
 
@@ -58,7 +58,6 @@ const Cart = () => {
       }))
     }
 
-    window.dispatchEvent(new Event('orders:updated'))
     orderMutation.mutate(request)
   }
 
@@ -84,7 +83,7 @@ const Cart = () => {
         onCancelOrder={() => setShowConfirmAlert(false)}
       />
 
-      <Pagination
+      <PageNavigator
         currentPage={currentPage}
         totalPages={totalPages}
         onPageChange={setCurrentPage}

@@ -52,16 +52,13 @@ npm start
 
 ## Scripts
 
-- `npm run dev` — Start development server (Turbopack)
-- `npm run build` — Create production build
-- `npm start` — Start production server
-- `npm run build:gh-pages` — Build for GitHub Pages
-- `npm run deploy` — Deploy to GitHub Pages
-- `npm run lint` — Run ESLint
-- `npm run lint:fix` — Fix lint issues
-- `npm run lint:next` — Run Next.js ESLint rules
-- `npm run format` — Format with Prettier
-- `npm run format:check` — Check formatting
+- `npm run dev` — Starts development server
+- `npm run build` — Creates production build
+- `npm run deploy:gh-pages` — Builds and pushes the out directory to GitHub Pages.
+- `npm run lint` — Runs ESLint and attempts to fix issues
+- `npm run lint:next` — Runs Next.js ESLint rules
+- `npm run format` — Formats with Prettier
+- `npm run format:check` — Checks formatting
 
 ## Project structure
 

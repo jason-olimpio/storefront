@@ -11,7 +11,7 @@ import { setAuthState, type RootState } from '@/store'
 
 import useAuthMutation from './useAuthMutation'
 
-import { AuthFormData, AuthMode } from '@/components/auth/AuthForm'
+import { AuthFormData, AuthMode } from '@/components/auth'
 
 import {
   DEFAULT_ADMIN_EMAIL,

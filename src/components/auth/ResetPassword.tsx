@@ -1,32 +1,28 @@
 'use client'
 
-import { useLocale, useTranslations } from 'next-intl'
-import { useSearchParams } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 
-import { ComponentProps, useEffect } from 'react'
+import { ComponentProps } from 'react'
 import { useMutation } from '@tanstack/react-query'
 
 import { z } from 'zod'
 
 import { useRouter } from '@/i18n/navigation'
-import { useForm } from '@/hooks'
 
+import { useForm, useSnackbarState } from '@/hooks'
 import { resetPassword } from '@/api/services'
-
 import { Input, Snackbar, SubmitButton } from '@/components'
+import { ResetData } from './form/AuthForm'
 
-import useSnackbarState from '@/hooks/useSnackbarState'
-
-const ResetPassword = () => {
+type ResetPasswordProps = {
+  resetData: ResetData
+  onSuccess: () => void
+}
+const ResetPassword = ({ resetData, onSuccess }: ResetPasswordProps) => {
+  const { email, token } = resetData
   const translations = useTranslations('ResetPassword')
   const registerTranslations = useTranslations('Register')
-
   const router = useRouter()
-  const searchParams = useSearchParams()
-  const locale = useLocale()
-
-  const token = searchParams.get('token')
-  const email = searchParams.get('email')
 
   const schema = z.object({
     password: z
@@ -46,27 +42,16 @@ const ResetPassword = () => {
 
   const { snackbar, show, close } = useSnackbarState()
 
-  useEffect(() => {
-    if (!token || !email) router.push('/')
-  }, [token, email, router, locale])
-
   const mutation = useMutation({
-    mutationFn: ({
-      email,
-      token,
-      password
-    }: {
-      token: string
-      email: string
-      password: string
-    }) => resetPassword({ email, resetCode: token, newPassword: password }),
+    mutationFn: () =>
+      resetPassword({ email, resetCode: token, newPassword: password }),
     onSuccess: messageKey => {
       show({
         message: translations(messageKey),
         variant: 'success'
       })
 
-      setTimeout(() => router.push('/'), 3000)
+      setTimeout(onSuccess, 3000)
     },
     onError: (error: Error) =>
       show({
@@ -85,23 +70,15 @@ const ResetPassword = () => {
         ...errors,
         confirmPassword: translations('passwordMismatch')
       })
-
       return
     }
 
-    if (!token || !email) {
-      show({
-        message: translations('invalidResetLink'),
-        variant: 'error'
-      })
-      return
-    }
+    mutation.mutate()
+  }
 
-    mutation.mutate({
-      token,
-      email,
-      password: password
-    })
+  if (!token || !email) {
+    router.push('/')
+    return
   }
 
   return (
@@ -130,7 +107,11 @@ const ResetPassword = () => {
           error={errors.confirmPassword}
         />
 
-        <SubmitButton label={translations('resetPassword')} className="mt-8" />
+        <SubmitButton
+          label={translations('resetPassword')}
+          className="mt-8"
+          disabled={mutation.isPending}
+        />
       </form>
 
       <Snackbar {...snackbar} onClose={close} />

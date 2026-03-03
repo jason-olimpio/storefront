@@ -6,7 +6,7 @@ import { useTranslations } from 'next-intl'
 import {
   LoadingSpinner,
   Snackbar,
-  Pagination,
+  PageNavigator,
   OrderStatCard,
   OrdersFilter,
   OrderRow,
@@ -31,13 +31,13 @@ type OrdersTableProps = {
 }
 
 const OrdersTable = ({ fetchOrders, isMyOrders = false }: OrdersTableProps) => {
-  const t = useTranslations(isMyOrders ? 'MyOrders' : 'OrdersPanel')
+  const translation = useTranslations(isMyOrders ? 'MyOrders' : 'OrdersPanel')
 
   const { snackbar, show, close } = useSnackbarState()
+  const { filter, filterRaw, setFilter } = useOrdersFilterParam()
+
   const [currentPage, setCurrentPage] = useState(1)
   const [expandedOrderId, setExpandedOrderId] = useState<number | null>(null)
-
-  const { filter, filterRaw, setFilter } = useOrdersFilterParam()
 
   const {
     queryKey,
@@ -58,17 +58,19 @@ const OrdersTable = ({ fetchOrders, isMyOrders = false }: OrdersTableProps) => {
   useEffect(() => {
     if (!isError) return
 
-    show({ message: t(error?.message || ''), variant: 'error' })
-  }, [isError, error?.message, show, t])
+    show({ message: translation(error?.message || ''), variant: 'error' })
+  }, [isError, error?.message, show, translation])
 
   const handleFilterChange = (newFilter: OrderFilterType) => {
     setCurrentPage(1)
     setFilter(newFilter)
   }
 
-  const handleStatusUpdateSuccess = () => {
-    show({ message: t('statusUpdatedSuccessfully'), variant: 'success' })
-  }
+  const handleStatusUpdateSuccess = () =>
+    show({
+      message: translation('statusUpdatedSuccessfully'),
+      variant: 'success'
+    })
 
   if (isLoading) return <LoadingSpinner />
 
@@ -76,8 +78,11 @@ const OrdersTable = ({ fetchOrders, isMyOrders = false }: OrdersTableProps) => {
     return (
       <div className="m-10">
         <div className="text-center py-8">
-          <p className="text-red-500 dark:text-red-400">{t(error.message)}</p>
+          <p className="text-red-500 dark:text-red-400">
+            {translation(error.message)}
+          </p>
         </div>
+
         <Snackbar {...snackbar} onClose={close} />
       </div>
     )
@@ -93,17 +98,17 @@ const OrdersTable = ({ fetchOrders, isMyOrders = false }: OrdersTableProps) => {
       <div className="flex justify-center lg:justify-start space-x-6 mb-8">
         <OrderStatCard
           value={stats?.deliveredToday || 0}
-          label={t('stats.ordersDeliveredToday')}
+          label={translation('stats.ordersDeliveredToday')}
         />
 
         <OrderStatCard
           value={stats?.pendingOrders || 0}
-          label={t('stats.pendingOrders')}
+          label={translation('stats.pendingOrders')}
         />
 
         <OrderStatCard
           value={stats?.shippingOrders || 0}
-          label={t('stats.shippingOrders')}
+          label={translation('stats.shippingOrders')}
         />
       </div>
     )
@@ -113,7 +118,7 @@ const OrdersTable = ({ fetchOrders, isMyOrders = false }: OrdersTableProps) => {
     if (orders.length === 0)
       return (
         <div className="text-center py-8 text-gray-500 dark:text-gray-400">
-          {t(isMyOrders ? 'noOrders' : 'noOrderFound')}
+          {translation(isMyOrders ? 'noOrders' : 'noOrderFound')}
         </div>
       )
 
@@ -121,6 +126,7 @@ const OrdersTable = ({ fetchOrders, isMyOrders = false }: OrdersTableProps) => {
       <div className="space-y-6">
         <table className="min-w-full shadow-md rounded-xl shadow-secondary dark:shadow-secondary-dark bg-secondary dark:bg-secondary-dark table-auto border-collapse">
           <OrdersTableHeader isMyOrders={isMyOrders} />
+
           <tbody>
             {orders.map((order, index) => (
               <OrderRow
@@ -138,7 +144,7 @@ const OrdersTable = ({ fetchOrders, isMyOrders = false }: OrdersTableProps) => {
           </tbody>
         </table>
 
-        <Pagination
+        <PageNavigator
           currentPage={currentPage}
           totalPages={totalPages}
           onPageChange={setCurrentPage}
@@ -151,7 +157,7 @@ const OrdersTable = ({ fetchOrders, isMyOrders = false }: OrdersTableProps) => {
     <div className="m-10">
       <div className="flex flex-col sm:flex-row justify-between items-center">
         <h1 className="font-semibold text-xl mb-3 sm:mb-0">
-          {t(isMyOrders ? 'orderHistory' : 'title')}
+          {translation(isMyOrders ? 'orderHistory' : 'title')}
         </h1>
 
         <OrdersFilter onFilterChange={handleFilterChange} />

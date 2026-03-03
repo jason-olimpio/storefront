@@ -1,26 +1,32 @@
 'use client'
 
+import { ComponentProps } from 'react'
+
 import { useTranslations } from 'next-intl'
 import Image from 'next/image'
 
-import { ComponentProps } from 'react'
+import { useMutation } from '@tanstack/react-query'
 
 import { z } from 'zod'
+
+import { ResetData } from './form/AuthForm'
 
 import { SubmitButton, Input, Snackbar } from '@/components'
 
 import { useForm, useSnackbarState } from '@/hooks'
-
-import { useMutation } from '@tanstack/react-query'
 
 import { forgotPassword } from '@/api/services'
 import { withBasePath } from '@/utils'
 
 type ForgotPasswordModalProps = {
   onClose: () => void
+  onResetSuccess?: (data: ResetData) => void
 }
 
-const ForgotPasswordModal = ({ onClose }: ForgotPasswordModalProps) => {
+const ForgotPasswordModal = ({
+  onClose,
+  onResetSuccess
+}: ForgotPasswordModalProps) => {
   const translations = useTranslations('Login')
 
   const schema = z.object({
@@ -35,21 +41,13 @@ const ForgotPasswordModal = ({ onClose }: ForgotPasswordModalProps) => {
 
   const forgotPasswordMutation = useMutation({
     mutationFn: async (email: string) => {
-      const messageKey = await forgotPassword(email)
-      return { messageKey, email }
-    },
-    onSuccess: ({ messageKey, email }) => {
-      show({
-        message: `${translations(messageKey)} Check console (F12) for reset code.`,
-        variant: 'success'
-      })
+      const token = await forgotPassword(email)
 
-      setTimeout(() => {
-        show({
-          message: `Reset code generated. Console (F12) or /reset-password?email=${encodeURIComponent(email)}&token=YOUR_CODE`,
-          variant: 'info'
-        })
-      }, 1000)
+      return { token, email }
+    },
+    onSuccess: ({ token, email }) => {
+      onResetSuccess?.({ email, token })
+      onClose()
     },
     onError: (error: Error) => {
       show({
@@ -57,7 +55,7 @@ const ForgotPasswordModal = ({ onClose }: ForgotPasswordModalProps) => {
         variant: 'error'
       })
 
-      setTimeout(() => onClose(), 3000)
+      setTimeout(() => onClose(), 2000)
     }
   })
 
@@ -110,10 +108,6 @@ const ForgotPasswordModal = ({ onClose }: ForgotPasswordModalProps) => {
             variant="thin"
             className="w-full my-5"
           />
-
-          <p className="text-xs text-foreground-secondary dark:text-foreground-secondary-dark mt-4 text-center">
-            {translations('resetCodeMessage')}
-          </p>
         </form>
 
         <Snackbar {...snackbar} onClose={close} />

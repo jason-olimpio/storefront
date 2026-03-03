@@ -1,15 +1,16 @@
-// src/api/orders/stats.ts
-import { OrderStatusEnum } from '@/types'
-import type { OrderStats, OrderType } from '@/types'
+import { type OrderStats, type OrderType, OrderStatusEnum } from '@/types'
 
-const computeOrderStats = (orders: OrderType[]): OrderStats =>
+const keyByStatus: Partial<Record<OrderStatusEnum, keyof OrderStats>> = {
+  [OrderStatusEnum.Delivered]: 'deliveredToday',
+  [OrderStatusEnum.Pending]: 'pendingOrders',
+  [OrderStatusEnum.Shipping]: 'shippingOrders'
+}
+
+export const computeOrderStats = (orders: OrderType[]): OrderStats =>
   orders.reduce<OrderStats>(
-    (accumulator, order) => {
-      if (order.status === OrderStatusEnum.Delivered)
-        accumulator.deliveredToday++
-      if (order.status === OrderStatusEnum.Pending) accumulator.pendingOrders++
-      if (order.status === OrderStatusEnum.Shipping)
-        accumulator.shippingOrders++
+    (accumulator, { status }) => {
+      const key = keyByStatus[status]
+      if (key) accumulator[key]++
 
       return accumulator
     },

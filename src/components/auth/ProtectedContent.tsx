@@ -2,6 +2,7 @@
 
 import { useEffect, useState, type ReactNode } from 'react'
 import { useSelector } from 'react-redux'
+
 import { usePathname, useRouter } from '@/i18n/navigation'
 import type { RootState } from '@/store'
 import { AuthForm, LoadingSpinner } from '@/components'

@@ -1,9 +1,9 @@
 import { useMutation } from '@tanstack/react-query'
 import { useTranslations } from 'next-intl'
 
-import type { AuthMode } from '@/components/auth/AuthForm'
-
 import { loginUser, registerUser } from '@/api/services'
+
+import { AuthMode } from '@/components/auth/form/AuthForm'
 
 type Tokens = { accessToken: string; refreshToken: string }
 

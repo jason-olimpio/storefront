@@ -7,13 +7,13 @@ const initializeUsers = () => {
   const defaultUsers: User[] = [
     {
       id: 1,
-      email: 'admin@storehub.com',
+      email: 'admin@example.com',
       name: 'Admin User',
       role: Role.Admin
     },
     {
       id: 2,
-      email: 'user@storehub.com',
+      email: 'user@example.com',
       name: 'Test User',
       role: Role.User
     }

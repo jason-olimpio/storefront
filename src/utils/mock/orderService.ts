@@ -1,4 +1,5 @@
 import { OrderType, OrderStatusEnum } from '@/types/models/order'
+
 import { STORAGE_KEYS } from './storageKeys'
 import { mockUserService } from './userService'
 
@@ -26,9 +27,11 @@ export const mockOrderService = {
 
   getUserOrders: (userId: number): OrderType[] => {
     const user = mockUserService.getUserById(userId)
+
     if (!user || !user.email) return []
 
     const orders = mockOrderService.getOrders()
+
     return orders.filter(order => order.username === user.email)
   },
 

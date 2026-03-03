@@ -11,10 +11,10 @@ const initializePasswords = () => {
 
   const passwords = localStorage.getItem(STORAGE_KEYS.PASSWORDS)
 
-  if (!passwords) {
-    mockPasswordService.setPassword(DEFAULT_ADMIN_EMAIL, DEFAULT_ADMIN_PASSWORD)
-    mockPasswordService.setPassword(DEFAULT_USER_EMAIL, DEFAULT_USER_PASSWORD)
-  }
+  if (passwords) return
+
+  mockPasswordService.setPassword(DEFAULT_ADMIN_EMAIL, DEFAULT_ADMIN_PASSWORD)
+  mockPasswordService.setPassword(DEFAULT_USER_EMAIL, DEFAULT_USER_PASSWORD)
 }
 
 export const mockPasswordService = {

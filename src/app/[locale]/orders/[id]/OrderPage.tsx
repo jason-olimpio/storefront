@@ -1,6 +1,6 @@
 'use client'
 
-import { useParams } from 'next/navigation'
+import { notFound, useParams } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import Image from 'next/image'
 import { useLocale } from 'use-intl'
@@ -8,11 +8,9 @@ import { useLocale } from 'use-intl'
 import { useEffect, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 
-import { useRouter } from '@/i18n/navigation'
-
 import { fetchOrderById } from '@/api/services'
 
-import { LoadingSpinner, Snackbar, Pagination } from '@/components/ui'
+import { LoadingSpinner, Snackbar, PageNavigator } from '@/components/ui'
 import { OrderStatus } from '@/components/orders'
 
 import { useSnackbarState, useUser } from '@/hooks'
@@ -35,7 +33,6 @@ const OrderPage = () => {
   const [currentPage, setCurrentPage] = useState(1)
 
   const { user } = useUser()
-  const router = useRouter()
 
   const query = useQuery({
     queryKey: ['order', id],
@@ -54,10 +51,7 @@ const OrderPage = () => {
 
   if (isLoading) return <LoadingSpinner />
 
-  if (user?.role !== Role.Admin && order?.username !== user?.email) {
-    router.push('/not-found')
-    return
-  }
+  if (user?.role !== Role.Admin && order?.username !== user?.email) notFound()
 
   const formattedDate = order
     ? new Intl.DateTimeFormat(locale, {
@@ -164,7 +158,7 @@ const OrderPage = () => {
         </tbody>
       </table>
 
-      <Pagination
+      <PageNavigator
         currentPage={currentPage}
         totalPages={totalPages}
         onPageChange={handlePageChange}

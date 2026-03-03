@@ -11,7 +11,7 @@ type PaginationProps = {
 
 const MAX_VISIBLE_PAGES = 5
 
-const Pagination = ({
+const PageNavigator = ({
   currentPage,
   totalPages,
   onPageChange,
@@ -109,4 +109,4 @@ const Pagination = ({
   )
 }
 
-export default Pagination
+export default PageNavigator

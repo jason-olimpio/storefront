@@ -3,7 +3,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { UsersResponse } from '@/types/models/user'
 import { fetchUsers } from '@/api/services/users'
-import { USERS_PAGE_SIZE } from '@/constants/pagination'
+import { USERS_PAGE_SIZE } from '@/components/ui/pagination'
 
 export const useUsersQuery = (searchTerm: string, currentPage: number) =>
   useQuery<UsersResponse>({

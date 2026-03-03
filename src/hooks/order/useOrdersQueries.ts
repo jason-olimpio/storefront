@@ -1,7 +1,7 @@
 'use client'
 
 import { useQuery } from '@tanstack/react-query'
-import { ORDERS_PAGE_SIZE } from '@/constants/pagination'
+import { ORDERS_PAGE_SIZE } from '@/components/ui/pagination'
 import computeOrderStats from '@/api/services/orders/stats'
 import { mockOrderService } from '@/utils'
 import type {

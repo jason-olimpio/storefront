@@ -1,6 +1,6 @@
 import UserListItem from './UserListItem'
 
-import Pagination from '@/components/ui/Pagination'
+import PageNavigator from '@/components/ui/pagination/PageNavigator'
 
 import { Role, User } from '@/types/models/user'
 
@@ -35,7 +35,7 @@ const UserList = ({
       />
     ))}
 
-    <Pagination
+    <PageNavigator
       currentPage={currentPage}
       totalPages={totalPages}
       onPageChange={onPageChange}

@@ -14,7 +14,7 @@ const AuthSync = () => {
     dispatch(setAuthState(!!token))
   }, [dispatch])
 
-  return
+  return null
 }
 
 export default AuthSync

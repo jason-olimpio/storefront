@@ -5,7 +5,7 @@ import { useTranslations } from 'next-intl'
 
 import { useState } from 'react'
 
-import Pagination from '@/components/ui/Pagination'
+import PageNavigator from '@/components/ui/pagination/PageNavigator'
 
 import { OrderItem } from '@/types/models/order'
 
@@ -106,7 +106,7 @@ const OrderItems = ({ items }: OrderItemsProps) => {
         </tbody>
       </table>
 
-      <Pagination
+      <PageNavigator
         currentPage={currentPage}
         totalPages={totalPages}
         onPageChange={handlePageChange}

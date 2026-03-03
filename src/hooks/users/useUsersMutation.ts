@@ -9,7 +9,7 @@ import {
   sortUsersByRoleAndName
 } from '@/utils/userUtils'
 
-import { USERS_PAGE_SIZE } from '@/constants/pagination'
+import { USERS_PAGE_SIZE } from '@/components/ui/pagination'
 
 import { UsersResponse, Role } from '@/types/models/user'
 

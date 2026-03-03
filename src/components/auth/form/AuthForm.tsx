@@ -6,9 +6,13 @@ import { useState } from 'react'
 import { Snackbar, SubmitButton, ToggleButton } from '@/components'
 
 import useAuthForm from '@/hooks/auth/useAuthForm'
-import ForgotPasswordModal from './ForgotPasswordModal'
-import AuthFormFields from './AuthFormFields'
-import QuickFillButtons from './QuickFillButtons'
+
+import {
+  ForgotPasswordModal,
+  AuthFormFields,
+  QuickFillButtons,
+  ResetPassword
+} from '@/components/auth'
 
 export type AuthMode = 'register' | 'login'
 export type AuthFormData = {
@@ -17,17 +21,24 @@ export type AuthFormData = {
   name?: string
 }
 
-const createSchema = (mode: AuthMode, tRegister: any) =>
+export type ResetData = {
+  token: string
+  email: string
+}
+
+const createSchema = (mode: AuthMode, registerTranslations: any) =>
   mode === 'register'
     ? z.object({
         email: z.email(),
         password: z
           .string()
-          .min(8, tRegister('passwordLength'))
-          .regex(/[A-Z]/, tRegister('passwordUppercase'))
-          .regex(/\d/, tRegister('passwordNumber'))
-          .regex(/[^a-zA-Z0-9]/, tRegister('passwordSpecial')),
-        name: z.string().regex(/^[a-zA-Z0-9 ]{3,50}$/, tRegister('invalidName'))
+          .min(8, registerTranslations('passwordLength'))
+          .regex(/[A-Z]/, registerTranslations('passwordUppercase'))
+          .regex(/\d/, registerTranslations('passwordNumber'))
+          .regex(/[^a-zA-Z0-9]/, registerTranslations('passwordSpecial')),
+        name: z
+          .string()
+          .regex(/^[a-zA-Z0-9 ]{3,50}$/, registerTranslations('invalidName'))
       })
     : z.object({
         email: z.email(),
@@ -39,8 +50,11 @@ const getInitialData = (mode: AuthMode): AuthFormData =>
     ? { email: '', password: '', name: '' }
     : { email: '', password: '' }
 
-const AuthForm = () => {
+export const AuthForm = () => {
   const [mode, setMode] = useState<AuthMode>('login')
+  const [resetData, setResetData] = useState<ResetData | null>(null)
+  const [forgotPasswordOpen, setForgotPasswordOpen] = useState(false)
+
   const loginTranslations = useTranslations('Login')
   const registerTranslations = useTranslations('Register')
 
@@ -65,8 +79,6 @@ const AuthForm = () => {
     initialData
   })
 
-  const [forgotPasswordOpen, setForgotPasswordOpen] = useState(false)
-
   const toggleMode = () => {
     const newMode = mode === 'register' ? 'login' : 'register'
 
@@ -74,12 +86,23 @@ const AuthForm = () => {
     setFormData(getInitialData(newMode))
   }
 
+  const handleResetSuccess = () => {
+    setResetData(null)
+    setMode('login')
+    setFormData(getInitialData('login'))
+  }
+
+  if (resetData)
+    return (
+      <ResetPassword resetData={resetData} onSuccess={handleResetSuccess} />
+    )
+
   if (isAuthenticated) return
 
   const isRegister = mode === 'register'
 
   return (
-    <div className="flex items-center justify-center min-h-screen w-screen">
+    <div className="flex items-center justify-center min-h-screen">
       <form onSubmit={handleSubmit} className="flex flex-col items-center">
         <AuthFormFields
           isRegister={isRegister}
@@ -134,10 +157,11 @@ const AuthForm = () => {
       <Snackbar {...snackbar} onClose={closeSnackbar} variant="error" />
 
       {forgotPasswordOpen && (
-        <ForgotPasswordModal onClose={() => setForgotPasswordOpen(false)} />
+        <ForgotPasswordModal
+          onClose={() => setForgotPasswordOpen(false)}
+          onResetSuccess={setResetData}
+        />
       )}
     </div>
   )
 }
-
-export default AuthForm

@@ -1,11 +1,12 @@
 'use client'
 
 import { useTranslations } from 'next-intl'
-import { useState, ChangeEvent, useEffect } from 'react'
-
-import { useUsersMutation, useUsersQuery } from '@/hooks/users'
+import { useEffect, useState, type ChangeEvent } from 'react'
 
 import withAdminRedirect from '@/hoc/withAdminRedirect'
+import { useUsersMutation, useUsersQuery } from '@/hooks/users'
+import useSnackbarState from '@/hooks/useSnackbarState'
+import { useUser } from '@/hooks'
 
 import {
   LoadingSpinner,
@@ -15,13 +16,13 @@ import {
   UserList
 } from '@/components'
 
-import useSnackbarState from '@/hooks/useSnackbarState' // ✅ New import
-
 import { Role } from '@/types'
-import { useUser } from '@/hooks'
+
+const DEBOUNCE_MS = 300
 
 const UsersPanel = () => {
-  const translations = useTranslations('UsersPanel')
+  const t = useTranslations('UsersPanel')
+
   const [inputValue, setInputValue] = useState('')
   const [searchTerm, setSearchTerm] = useState('')
   const [currentPage, setCurrentPage] = useState(1)
@@ -30,12 +31,13 @@ const UsersPanel = () => {
   )
 
   const { snackbar, show, close } = useSnackbarState()
+  const { user: currentUser } = useUser()
 
   useEffect(() => {
     const timer = setTimeout(() => {
       setSearchTerm(inputValue)
       setCurrentPage(1)
-    }, 300)
+    }, DEBOUNCE_MS)
 
     return () => clearTimeout(timer)
   }, [inputValue])
@@ -44,28 +46,31 @@ const UsersPanel = () => {
     searchTerm,
     currentPage
   )
-
-  const { user: currentUser } = useUser()
-
-  const filteredUsers = paginatedUsers?.users.filter(
-    user => user.id !== currentUser?.id
-  )
-
   const updateRoleMutation = useUsersMutation(searchTerm, currentPage)
 
-  const handleRoleChange = (params: { userId: number; roleId: Role }) => {
-    updateRoleMutation.mutate(params, {
-      onSuccess: () =>
-        show({
-          message: translations('roleUpdatedSuccessfully'),
-          variant: 'success'
-        })
-    })
+  const users = paginatedUsers?.users ?? []
+  const filteredUsers = users.filter(user => user.id !== currentUser?.id)
+
+  const renderContent = () => {
+    if (isLoading) return <LoadingSpinner />
+
+    if (!filteredUsers.length) return <NoUsersMessage />
+
+    return (
+      <UserList
+        users={filteredUsers}
+        openDropdownIndex={openDropdownIndex}
+        onToggleDropdown={handleToggleDropdown}
+        onRoleChange={handleRoleChange}
+        totalPages={paginatedUsers?.totalPages}
+        currentPage={currentPage}
+        onPageChange={handlePageChange}
+      />
+    )
   }
 
-  const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) =>
     setInputValue(event.target.value)
-  }
 
   const handleClearSearch = () => {
     setInputValue('')
@@ -76,16 +81,23 @@ const UsersPanel = () => {
   const handlePageChange = (page: number) => setCurrentPage(page)
 
   const handleToggleDropdown = (index: number) =>
-    setOpenDropdownIndex(previousState =>
-      previousState === index ? null : index
+    setOpenDropdownIndex(previousIndex =>
+      previousIndex === index ? null : index
     )
 
-  if (isLoading) return <LoadingSpinner />
+  const handleRoleChange = (params: { userId: number; roleId: Role }) =>
+    updateRoleMutation.mutate(params, {
+      onSuccess: () =>
+        show({
+          message: t('roleUpdatedSuccessfully'),
+          variant: 'success'
+        })
+    })
 
   return (
     <div className="m-10">
       <div className="flex flex-col sm:flex-row justify-between items-center">
-        <p className="text-xl font-semibold">{translations('title')}</p>
+        <p className="text-xl font-semibold">{t('title')}</p>
 
         <SearchBar
           searchTerm={inputValue}
@@ -96,19 +108,7 @@ const UsersPanel = () => {
 
       <hr className="my-10 border-gray-300 dark:border-gray-600" />
 
-      {filteredUsers?.length ? (
-        <UserList
-          users={filteredUsers}
-          openDropdownIndex={openDropdownIndex}
-          onToggleDropdown={handleToggleDropdown}
-          onRoleChange={handleRoleChange}
-          totalPages={paginatedUsers?.totalPages}
-          currentPage={currentPage}
-          onPageChange={handlePageChange}
-        />
-      ) : (
-        <NoUsersMessage />
-      )}
+      {renderContent()}
 
       <Snackbar {...snackbar} onClose={close} />
     </div>
